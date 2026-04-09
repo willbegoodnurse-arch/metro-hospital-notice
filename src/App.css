@@ -205,6 +205,22 @@ button { cursor: pointer; font-family: inherit; }
 /* ── Highlight ── */
 mark { background: #fff176; color: inherit; border-radius: 2px; padding: 0 1px; }
 
+/* ── Password Gate ── */
+.gate-backdrop {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #e8f7f5 0%, #f4f6f9 100%);
+}
+.gate-box {
+  background: var(--white); border-radius: 16px; box-shadow: var(--shadow-lg);
+  padding: 48px 40px; width: 100%; max-width: 380px; text-align: center;
+}
+.gate-logo { height: 56px; width: auto; margin-bottom: 24px; }
+.gate-title { font-size: 1.2rem; font-weight: 700; color: var(--teal-dark); margin-bottom: 6px; }
+.gate-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 28px; }
+.gate-form { display: flex; flex-direction: column; gap: 10px; }
+.gate-input { text-align: center; font-size: 1rem; letter-spacing: 4px; }
+.gate-btn { width: 100%; padding: 12px; font-size: 1rem; }
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
   .header-inner { padding: 10px 16px; }

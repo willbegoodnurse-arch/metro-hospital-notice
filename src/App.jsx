@@ -5,9 +5,10 @@ import Header from './components/Header';
 import NoticeCard from './components/NoticeCard';
 import NoticeForm from './components/NoticeForm';
 import CategoryManager from './components/CategoryManager';
+import PasswordGate from './components/PasswordGate';
 import './App.css';
 
-export default function App() {
+function NoticeApp() {
   const [notices, setNotices] = useLocalStorage('metro_notices', DEFAULT_NOTICES);
   const [categories, setCategories] = useLocalStorage('metro_categories', DEFAULT_CATEGORIES);
   const [activeCategory, setActiveCategory] = useState('전체');
@@ -143,4 +144,21 @@ export default function App() {
       )}
     </div>
   );
+}
+
+export default function App() {
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem('metro_authed') === 'true');
+
+  if (!authed) {
+    return (
+      <PasswordGate
+        onSuccess={() => {
+          sessionStorage.setItem('metro_authed', 'true');
+          setAuthed(true);
+        }}
+      />
+    );
+  }
+
+  return <NoticeApp />;
 }
