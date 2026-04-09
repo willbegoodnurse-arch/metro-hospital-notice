@@ -23,7 +23,7 @@ function NoticeApp() {
     .filter(n => {
       if (!keyword.trim()) return true;
       const kw = keyword.toLowerCase();
-      return n.title.toLowerCase().includes(kw) || n.content.toLowerCase().includes(kw) || n.author.toLowerCase().includes(kw);
+      return n.content.toLowerCase().includes(kw) || n.category.toLowerCase().includes(kw);
     })
     .sort((a, b) => {
       if (a.important !== b.important) return a.important ? -1 : 1;
