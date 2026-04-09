@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICU 챠팅 템플릿</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F4F6F9;
+  --card: #FFFFFF;
+  --card-border: #E2E6ED;
+  --text: #1A2233;
+  --text-2: #5A6578;
+  --text-3: #8B95A5;
+  --accent: #2563EB;
+  --accent-light: #EFF6FF;
+  --accent-dark: #1D4ED8;
+  --green: #16A34A;
+  --green-bg: #ECFDF5;
+  --green-border: #86EFAC;
+  --yellow: #CA8A04;
+  --yellow-bg: #FEFCE8;
+  --yellow-border: #FDE047;
+  --red: #DC2626;
+  --red-bg: #FEF2F2;
+  --red-border: #FECACA;
+  --purple: #7C3AED;
+  --purple-bg: #F5F3FF;
+  --purple-border: #C4B5FD;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1218;
+    --card: #1A1F2B;
+    --card-border: #2A3040;
+    --text: #E8ECF1;
+    --text-2: #9AA3B4;
+    --text-3: #5F6A7D;
+    --accent: #60A5FA;
+    --accent-light: #1E293B;
+    --accent-dark: #93C5FD;
+    --green: #4ADE80;
+    --green-bg: #0D2818;
+    --green-border: #166534;
+    --yellow: #FACC15;
+    --yellow-bg: #27200A;
+    --yellow-border: #854D0E;
+    --red: #F87171;
+    --red-bg: #2A1215;
+    --red-border: #991B1B;
+    --purple: #A78BFA;
+    --purple-bg: #1A1530;
+    --purple-border: #5B21B6;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+.app { max-width: 860px; margin: 0 auto; padding: 12px 16px 80px; }
+
+/* Header */
+.app-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 6px 0; }
+.app-logo { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.app-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.app-subtitle { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+/* Tab Bar */
+.tab-bar { display: flex; gap: 4px; background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 4px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+.tab-btn { flex: 1; padding: 10px 8px; border-radius: 7px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; background: transparent; color: var(--text-2); transition: all 0.2s; font-family: var(--font); }
+.tab-btn:hover { background: var(--accent-light); }
+.tab-btn.on { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(37,99,235,0.3); }
+
+/* Time buttons */
+.time-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.time-btn { padding: 7px 16px; border-radius: 20px; border: 1px solid var(--card-border); font-size: 12px; font-weight: 500; cursor: pointer; background: var(--card); color: var(--text-2); transition: all 0.15s; font-family: var(--font); }
+.time-btn:hover { border-color: var(--purple); color: var(--purple); }
+.time-btn.on { background: var(--purple); color: #fff; border-color: var(--purple); box-shadow: 0 2px 6px rgba(124,58,237,0.3); }
+
+/* Section Card */
+.sec { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 10px; box-shadow: var(--shadow-sm); overflow: hidden; }
+.sec-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; user-select: none; }
+.sec-header:hover { background: var(--accent-light); }
+.sec-h { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; }
+.sec-h .icon { font-size: 14px; }
+.sec-arrow { font-size: 11px; color: var(--text-3); transition: transform 0.2s; }
+.sec-arrow.closed { transform: rotate(-90deg); }
+.sec-body { padding: 4px 16px 14px; }
+.sec-body.collapsed { display: none; }
+
+/* Sub-label */
+.sub { font-size: 11px; font-weight: 500; color: var(--text-3); margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.sub:first-child { margin-top: 4px; }
+
+/* Chips */
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--card-border); font-size: 12px; cursor: pointer; background: var(--card); color: var(--text-2); transition: all 0.12s; user-select: none; font-family: var(--font); }
+.chip:hover { border-color: var(--text-3); }
+.chip.on { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+.chip.on-ok { background: var(--green-bg); border-color: var(--green); color: var(--green); font-weight: 500; }
+.chip.on-warn { background: var(--yellow-bg); border-color: var(--yellow); color: var(--yellow); font-weight: 500; }
+.chip.on-dng { background: var(--red-bg); border-color: var(--red); color: var(--red); font-weight: 500; }
+
+/* Form elements */
+.row { display: flex; gap: 8px; align-items: center; margin-bottom: 7px; flex-wrap: wrap; }
+.row label { font-size: 12px; color: var(--text-2); min-width: 70px; font-weight: 500; }
+input[type=number], input[type=text] {
+  font-size: 12px; padding: 6px 8px; border: 1px solid var(--card-border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text); font-family: var(--font); transition: border-color 0.15s;
+}
+input[type=number]:focus, input[type=text]:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+input[type=number] { width: 64px; }
+input[type=text] { width: 120px; }
+select {
+  font-size: 12px; padding: 6px 8px; border: 1px solid var(--card-border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text); font-family: var(--font);
+}
+textarea {
+  font-size: 12px; padding: 8px 10px; border: 1px solid var(--card-border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text); resize: vertical; width: 100%; min-height: 56px; font-family: var(--font);
+}
+
+/* Parameter box */
+.pbox { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; padding: 12px 14px; border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--bg); }
+.pbox label { font-size: 11px; color: var(--text-3); display: block; margin-bottom: 4px; white-space: nowrap; font-weight: 500; }
+.pbox input { width: 74px; }
+
+/* Mode buttons */
+.mode-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.mode-btn { padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--card-border); font-size: 12px; font-weight: 500; cursor: pointer; background: var(--card); color: var(--text-2); transition: all 0.12s; font-family: var(--font); }
+.mode-btn:hover { border-color: var(--accent); color: var(--accent); }
+.mode-btn.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Drug tags */
+.dtag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; margin: 2px; cursor: pointer; user-select: none; transition: opacity 0.12s; }
+.dtag:hover { opacity: 0.7; }
+.dtag-run { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent); }
+.dtag-inf { background: var(--green-bg); color: var(--green); border: 1px solid var(--green); }
+
+/* Score buttons */
+.sbtn { padding: 5px 0; border-radius: var(--radius-sm); border: 1px solid var(--card-border); font-size: 12px; cursor: pointer; background: var(--card); color: var(--text-2); min-width: 32px; text-align: center; transition: all 0.12s; font-family: var(--font); font-weight: 500; }
+.sbtn:hover { border-color: var(--text-3); }
+.sbtn.s0 { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.sbtn.s1 { background: var(--yellow-bg); border-color: var(--yellow); color: var(--yellow); }
+.sbtn.s2 { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+/* Action buttons */
+.btn-row { display: flex; gap: 8px; margin-top: 14px; padding: 0 0 4px; }
+button.act {
+  padding: 8px 18px; border-radius: var(--radius-sm); border: 1px solid var(--card-border);
+  background: var(--card); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer;
+  font-family: var(--font); transition: all 0.15s;
+}
+button.act:hover { background: var(--bg); }
+button.act.blue { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.act.blue:hover { background: var(--accent-dark); }
+button.act.green { background: var(--green); color: #fff; border-color: var(--green); }
+button.act.green:hover { opacity: 0.9; }
+button.act.sm { padding: 5px 10px; font-size: 12px; }
+
+/* Output box */
+.out-box {
+  background: var(--bg); border: 1px solid var(--card-border); border-radius: var(--radius-sm);
+  padding: 14px 16px; font-size: 12.5px; line-height: 2; white-space: pre-wrap;
+  color: var(--text); font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; min-height: 60px;
+}
+
+/* Divider */
+.hr { border: none; border-top: 1px solid var(--card-border); margin: 10px 0; }
+
+/* Infusion row */
+.inf-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--bg); }
+
+/* Line dressing per-item */
+.line-dress-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; margin-top: 4px; border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--bg); font-size: 12px; flex-wrap: wrap; }
+.line-dress-item .ld-label { font-weight: 500; color: var(--accent); min-width: 120px; }
+.line-dress-item select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--card); color: var(--text); font-family: var(--font); }
+
+/* Toast notification */
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1A2233; color: #fff; padding: 10px 24px; border-radius: 30px; font-size: 13px; font-weight: 500; z-index: 999; opacity: 0; transition: all 0.3s; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .app { padding: 8px 10px 80px; }
+  .sec-body { padding: 4px 12px 12px; }
+  .sec-header { padding: 10px 12px; }
+  .row { gap: 6px; }
+  .row label { min-width: 55px; font-size: 11px; }
+  input[type=number] { width: 56px; }
+  .pbox { gap: 8px; padding: 10px; }
+  .pbox input { width: 62px; }
+  .inf-row { padding: 8px; }
+  .inf-row select { width: 100% !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="app-header">
+  <div class="app-logo">IC</div>
+  <div>
+    <div class="app-title">ICU 챠팅 템플릿</div>
+    <div class="app-subtitle">중환자실 간호기록 생성기</div>
+  </div>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn on" id="main-tab-icu" onclick="switchMainTab('icu')">🏥 첫 챠팅 (ICU)</button>
+  <button class="tab-btn" id="main-tab-admit" onclick="switchMainTab('admit')">📋 입원 챠팅</button>
+</div>
+
+<!-- ===================== 첫 챠팅 ===================== -->
+<div id="tab-first">
+
+<!-- V/S -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🫀</span> V/S</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="row">
+      <label>BP (mmHg)</label>
+      <input type="number" id="sbp" placeholder="120" style="width:56px"> / <input type="number" id="dbp" placeholder="80" style="width:56px">
+      <label style="min-width:24px">HR</label><input type="number" id="hr" placeholder="72" style="width:56px">
+      <label style="min-width:20px">RR</label><input type="number" id="rr" placeholder="16" style="width:52px">
+      <label style="min-width:46px">BT (°C)</label><input type="number" id="bt" placeholder="36.5" step="0.1" style="width:58px">
+      <label style="min-width:52px">SpO2 (%)</label><input type="number" id="spo2" placeholder="100" style="width:56px">
+    </div>
+  </div>
+</div>
+
+<!-- EKG -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">📟</span> EKG</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">기본 리듬</div>
+    <div class="chips" data-grp="ekg-base">
+      <span class="chip" data-v="Sinus rhythm">Sinus rhythm</span>
+      <span class="chip" data-v="Sinus tachycardia">Sinus tachy</span>
+      <span class="chip" data-v="Sinus bradycardia">Sinus brady</span>
+    </div>
+    <div class="sub">A-fib / Flutter</div>
+    <div class="chips" data-grp="ekg-afib">
+      <span class="chip" data-v="Atrial fibrillation c CVR">A-fib (CVR)</span>
+      <span class="chip" data-v="Atrial fibrillation c RVR">A-fib (RVR)</span>
+      <span class="chip" data-v="Atrial fibrillation c SVR">A-fib (SVR)</span>
+      <span class="chip" data-v="Atrial flutter">A-flutter</span>
+    </div>
+    <div class="sub">Ectopy</div>
+    <div class="chips" data-grp="ekg-ectopy">
+      <span class="chip" data-color="warn" data-v="c intermittently PVC">PVC (간헐)</span>
+      <span class="chip" data-color="dng" data-v="c frequently PVC">PVC (빈발)</span>
+      <span class="chip" data-color="warn" data-v="c intermittently premature beat(3~5회/min)">Premature beat (간헐)</span>
+      <span class="chip" data-color="dng" data-v="c frequently premature beat">Premature beat (빈발)</span>
+    </div>
+    <div class="sub">추가 소견</div>
+    <div class="chips" data-grp="ekg-add">
+      <span class="chip" data-v="c RBBB">+ RBBB</span>
+      <span class="chip" data-v="c LBBB">+ LBBB</span>
+      <span class="chip" data-color="warn" data-v="c ST elevation">+ ST elevation</span>
+      <span class="chip" data-color="warn" data-v="c ST depression">+ ST depression</span>
+      <span class="chip" data-v="특이소견 없어 주의관찰">특이소견 없어 주의관찰</span>
+    </div>
+  </div>
+</div>
+
+<!-- 호흡 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🫁</span> 호흡</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="resp" data-single="1" style="margin-bottom:10px">
+      <span class="chip on" data-v="vent">인공호흡기</span>
+      <span class="chip" data-v="o2">O2 흡입</span>
+      <span class="chip" data-v="none">자발호흡</span>
+    </div>
+
+    <!-- 인공호흡기 -->
+    <div id="vent-sec">
+      <div class="row">
+        <label>기도삽관</label>
+        <select id="tube-type"><option>E-tube</option><option>T-tube</option></select>
+        <input type="text" id="tube-size" placeholder="7.5Fr" style="width:65px">
+        <input type="text" id="tube-depth" placeholder="23cm" style="width:65px">
+      </div>
+      <div class="sub">Mode</div>
+      <div class="mode-bar">
+        <button class="mode-btn on" onclick="setMode('ACMV_VC')">ACMV (VC)</button>
+        <button class="mode-btn" onclick="setMode('ACMV_PC')">ACMV (PC)</button>
+        <button class="mode-btn" onclick="setMode('SIMV')">SIMV</button>
+        <button class="mode-btn" onclick="setMode('CPAP')">CPAP</button>
+        <button class="mode-btn" onclick="setMode('PSV')">PSV</button>
+      </div>
+      <div class="pbox" id="p-ACMV_VC">
+        <div><label>TV (ml)</label><input type="number" id="vc-tv" placeholder="500"></div>
+        <div><label>RR (회/min)</label><input type="number" id="vc-rr" placeholder="12"></div>
+        <div><label>PEEP (cmH₂O)</label><input type="number" id="vc-peep" placeholder="5"></div>
+        <div><label>FiO2</label><input type="number" id="vc-fio2" placeholder="0.3" step="0.05"></div>
+      </div>
+      <div class="pbox" id="p-ACMV_PC" style="display:none">
+        <div><label>PC above PEEP</label><input type="number" id="pc-ps" placeholder="15"></div>
+        <div><label>RR (회/min)</label><input type="number" id="pc-rr" placeholder="12"></div>
+        <div><label>PEEP (cmH₂O)</label><input type="number" id="pc-peep" placeholder="5"></div>
+        <div><label>FiO2</label><input type="number" id="pc-fio2" placeholder="0.3" step="0.05"></div>
+      </div>
+      <div class="pbox" id="p-SIMV" style="display:none">
+        <div><label>TV (ml)</label><input type="number" id="simv-tv" placeholder="500"></div>
+        <div><label>RR (회/min)</label><input type="number" id="simv-rr" placeholder="12"></div>
+        <div><label>PS (cmH₂O)</label><input type="number" id="simv-ps" placeholder="10"></div>
+        <div><label>PEEP (cmH₂O)</label><input type="number" id="simv-peep" placeholder="5"></div>
+        <div><label>FiO2</label><input type="number" id="simv-fio2" placeholder="0.3" step="0.05"></div>
+      </div>
+      <div class="pbox" id="p-CPAP" style="display:none">
+        <div><label>PEEP (cmH₂O)</label><input type="number" id="cpap-peep" placeholder="5"></div>
+        <div><label>FiO2</label><input type="number" id="cpap-fio2" placeholder="0.3" step="0.05"></div>
+      </div>
+      <div class="pbox" id="p-PSV" style="display:none">
+        <div><label>PS above PEEP</label><input type="number" id="psv-ps" placeholder="10"></div>
+        <div><label>PEEP (cmH₂O)</label><input type="number" id="psv-peep" placeholder="5"></div>
+        <div><label>FiO2</label><input type="number" id="psv-fio2" placeholder="0.3" step="0.05"></div>
+      </div>
+      <div class="pbox" id="p-pressure" style="margin-top:8px">
+        <div><label>Ppeak (cmH₂O)</label><input type="number" id="ppeak" placeholder="25"></div>
+        <div><label>Pplat (cmH₂O)</label><input type="number" id="pplat" placeholder="21"></div>
+        <div><label>Driving P</label><input type="number" id="dp" placeholder="15"></div>
+      </div>
+      <div class="sub">Vent 상태</div>
+      <div class="chips" data-grp="vent-issue">
+        <span class="chip" data-color="ok" data-v="vent_ok">특이사항 없음</span>
+        <span class="chip" data-color="warn" data-v="vent_fight">Vent fighting</span>
+        <span class="chip" data-color="warn" data-v="alarm">Alarm 발생</span>
+      </div>
+      <div class="sub">Suction</div>
+      <div class="chips" data-grp="sp-need">
+        <span class="chip" data-v="suction_done">Suction 시행함</span>
+        <span class="chip" data-color="ok" data-v="suction_no">Suction 필요 없음</span>
+      </div>
+      <div id="suction-sec" style="display:none;margin-top:6px">
+        <div class="sub" style="margin-top:2px">가래 색상</div>
+        <div class="chips" data-grp="sp-color">
+          <span class="chip" data-v="맑은">맑은</span>
+          <span class="chip" data-color="warn" data-v="누런">누런</span>
+          <span class="chip" data-color="dng" data-v="갈색">갈색</span>
+          <span class="chip" data-color="dng" data-v="혈성">혈성</span>
+        </div>
+        <div class="sub">가래 성상</div>
+        <div class="chips" data-grp="sp-tex">
+          <span class="chip" data-v="묽은">묽은</span>
+          <span class="chip" data-v="진득한">진득한</span>
+        </div>
+        <div class="sub">가래 양</div>
+        <div class="chips" data-grp="sp-amt">
+          <span class="chip" data-v="소량">소량</span>
+          <span class="chip" data-v="중등량">중등량</span>
+          <span class="chip" data-v="다량">다량</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- O2 -->
+    <div id="o2-sec" style="display:none">
+      <div class="row">
+        <label>유량 (L/min)</label><input type="number" id="o2-rate" placeholder="3" style="width:60px">
+        <label style="min-width:28px">경로</label>
+        <select id="o2-route">
+          <option value="nasal prong">Nasal prong</option>
+          <option value="simple mask">Simple mask</option>
+          <option value="venture mask">Venture mask</option>
+          <option value="NRB mask">NRB mask</option>
+          <option value="HFNC">HFNC</option>
+        </select>
+      </div>
+      <div id="hfnc-params" style="display:none;margin-top:6px">
+        <div class="row">
+          <label>Flow (L/min)</label><input type="number" id="hfnc-flow" placeholder="40" style="width:60px">
+          <label style="min-width:30px">FiO2</label><input type="number" id="hfnc-fio2" placeholder="0.4" step="0.05" style="width:60px">
+        </div>
+      </div>
+      <div class="chips" data-grp="dyspnea" style="margin-top:8px">
+        <span class="chip" data-color="ok" data-v="dyspnea-">Dyspnea (-)</span>
+        <span class="chip" data-color="dng" data-v="dyspnea+">Dyspnea (+)</span>
+        <span class="chip" data-v="sec-pm">Secretion (±)</span>
+        <span class="chip" data-color="ok" data-v="sec-">Secretion (-)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M/S & GCS -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🧠</span> M/S & GCS</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="ms" data-single="1">
+      <span class="chip" data-color="ok" data-v="Alert">Alert</span>
+      <span class="chip" data-v="Drowsy">Drowsy</span>
+      <span class="chip" data-color="warn" data-v="Confusion">Confusion</span>
+      <span class="chip" data-color="warn" data-v="Stupor">Stupor</span>
+      <span class="chip" data-color="dng" data-v="Near stupor">Near stupor</span>
+      <span class="chip" data-color="dng" data-v="Semi-coma">Semi-coma</span>
+      <span class="chip" data-color="dng" data-v="Coma">Coma</span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <label>GCS E</label>
+      <select id="gcs-e"><option>4</option><option>3</option><option>2</option><option>1</option></select>
+      <label style="min-width:18px">V</label>
+      <select id="gcs-v"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option><option>1T</option></select>
+      <label style="min-width:18px">M</label>
+      <select id="gcs-m"><option>6</option><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+    </div>
+    <div class="sub">동공 반응 (추가)</div>
+    <div class="row">
+      <label>Lt pupil (mm)</label><input type="number" id="pupil-lt" placeholder="3" style="width:50px">
+      <label style="min-width:30px">반응</label>
+      <select id="pupil-lt-r"><option value="prompt">Prompt</option><option value="sluggish">Sluggish</option><option value="fixed">Fixed</option></select>
+    </div>
+    <div class="row">
+      <label>Rt pupil (mm)</label><input type="number" id="pupil-rt" placeholder="3" style="width:50px">
+      <label style="min-width:30px">반응</label>
+      <select id="pupil-rt-r"><option value="prompt">Prompt</option><option value="sluggish">Sluggish</option><option value="fixed">Fixed</option></select>
+    </div>
+  </div>
+</div>
+
+<!-- 통증 사정 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">💢</span> 통증 사정</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">스케일</div>
+    <div class="chips" id="pain1-type" style="margin-bottom:8px">
+      <span class="chip on" data-pscale="NRS">NRS</span>
+      <span class="chip" data-pscale="FPRS">FPRS</span>
+      <span class="chip" data-pscale="VAS">VAS</span>
+      <span class="chip" data-pscale="CPOT">CPOT (비언어)</span>
+    </div>
+    <div class="sub">점수</div>
+    <div id="pain1-scores" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+    <div class="sub" style="margin-top:8px">중재</div>
+    <div class="chips" data-grp="pain1-act">
+      <span class="chip" data-color="ok" data-v="none">통증 호소 없음</span>
+      <span class="chip" data-v="obs">주의관찰</span>
+      <span class="chip" data-color="warn" data-v="med">진통제 투여 후 경감</span>
+      <span class="chip" data-color="warn" data-v="nmed">비약물적 중재 시행</span>
+    </div>
+  </div>
+</div>
+
+<!-- 도관/Line -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🩺</span> 도관 / Line</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="line">
+      <span class="chip" data-v="rt-picc">Rt PICC</span>
+      <span class="chip" data-v="lt-picc">Lt PICC</span>
+      <span class="chip" data-v="rt-subcath">Rt Sub-cath</span>
+      <span class="chip" data-v="lt-subcath">Lt Sub-cath</span>
+      <span class="chip" data-v="rt-permcath">Rt Perm-cath</span>
+      <span class="chip" data-v="lt-permcath">Lt Perm-cath</span>
+      <span class="chip" data-v="rt-ij">Rt IJ</span>
+      <span class="chip" data-v="lt-ij">Lt IJ</span>
+      <span class="chip" data-v="a-line">A-line</span>
+      <span class="chip" data-v="thoracath">Thora-cath</span>
+      <span class="chip" data-v="ctd">CTD Drain</span>
+      <span class="chip" data-v="nat-drain">Natural drainage</span>
+      <span class="chip" data-v="gomco">Gomco drainage</span>
+      <span class="chip" data-v="jp-drain">JP Drain</span>
+      <span class="chip" data-v="hemovac">Hemovac</span>
+    </div>
+    <div id="line-dress-list" style="margin-top:6px"></div>
+    <div id="drain-sec" style="display:none;margin-top:8px">
+      <div class="sub">배액 양상</div>
+      <div class="chips" data-grp="drain-color">
+        <span class="chip" data-color="ok" data-v="clear">Clear</span>
+        <span class="chip" data-color="ok" data-v="serosanguineous">Serosanguineous</span>
+        <span class="chip" data-color="warn" data-v="sanguineous">Sanguineous</span>
+        <span class="chip" data-color="warn" data-v="bilious">Bilious</span>
+        <span class="chip" data-color="warn" data-v="turbid">Turbid</span>
+        <span class="chip" data-color="dng" data-v="purulent">Purulent</span>
+        <span class="chip" data-v="serous">Serous</span>
+      </div>
+      <div class="chips" data-grp="drain-amt" style="margin-top:5px">
+        <span class="chip" data-v="소량">소량</span>
+        <span class="chip" data-v="중등량">중등량</span>
+        <span class="chip" data-v="다량">다량</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 주입 약물 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">💉</span> 주입 약물</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">Running</div>
+    <div id="run-list" style="margin-bottom:6px"></div>
+    <div class="chips" style="margin-bottom:6px">
+      <span class="chip" onclick="addRun('Hepatamin 250ml')">Hepatamin</span>
+      <span class="chip" onclick="addRun('20% D/W 300ml')">20% D/W</span>
+      <span class="chip" onclick="addRun('5% D/W 200ml + MVH 1V')">MVH</span>
+      <span class="chip" onclick="addRun('TPN')">TPN</span>
+      <span class="chip" onclick="addRun('3% NaCl 500ml')">3% NaCl</span>
+      <span class="chip" onclick="addRun('N/S 500ml')">N/S 500</span>
+      <span class="chip" onclick="addRun('H/S 500ml')">H/S 500</span>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="run-inp" placeholder="직접 입력..." style="width:200px" onkeydown="if(event.key==='Enter')addRunCustom()">
+      <button class="act sm" onclick="addRunCustom()">+ 추가</button>
+    </div>
+    <div class="hr"></div>
+    <div class="sub">Infusion (속도 포함)</div>
+    <div id="inf-list" style="margin-bottom:6px"></div>
+    <div class="inf-row">
+      <select id="inf-drug" style="width:185px">
+        <option value="">-- 약물 선택 --</option>
+        <option>Dopamine 800mg/500ml</option>
+        <option>N-Epinephrine 4mg/4ml</option>
+        <option>Perdipine 10mg</option>
+        <option>3% NaCl 500ml</option>
+        <option>Midazolam 50mg</option>
+        <option>Fentanyl 500mcg</option>
+        <option>Heparin 25000U</option>
+        <option>Insulin RI 50U</option>
+        <option value="_custom">직접입력</option>
+      </select>
+      <div id="inf-custom-wrap" style="display:none">
+        <input type="text" id="inf-custom" placeholder="약물명" style="width:140px">
+      </div>
+      <span style="font-size:12px;color:var(--text-3)">+</span>
+      <select id="inf-sol" style="width:115px">
+        <option value="">용해제 없음</option>
+        <option>5% D/W 100ml</option><option>5% D/W 200ml</option><option>5% D/W 500ml</option>
+        <option>N/S 100ml</option><option>N/S 250ml</option><option>N/S 500ml</option>
+      </select>
+      <input type="number" id="inf-rate" placeholder="cc/hr" style="width:64px">
+      <span style="font-size:12px;color:var(--text-3)">cc/hr</span>
+      <button class="act sm" onclick="addInf()">+ 추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- L-tube -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🍽</span> L-tube / 경관식</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="ltube" data-single="1">
+      <span class="chip" data-v="yes">L-tube 삽입 중</span>
+      <span class="chip" data-v="no">없음</span>
+    </div>
+    <div id="ltube-sec" style="display:none;margin-top:8px">
+      <div class="chips" data-grp="feed" data-single="1">
+        <span class="chip" data-color="ok" data-v="ok">경관식 유지중</span>
+        <span class="chip" data-v="npo">NPO</span>
+        <span class="chip" data-v="sow">NPO (SOW)</span>
+      </div>
+      <div class="sub">위잔류량</div>
+      <div class="chips" data-grp="resid" data-single="1">
+        <span class="chip" data-color="ok" data-v="none">위잔류량 없음</span>
+        <span class="chip" data-color="warn" data-v="some">위잔류량 있음</span>
+      </div>
+      <div class="row" id="resid-amt-row" style="display:none;margin-top:5px">
+        <label>잔류량 (ml)</label><input type="number" id="resid-amt" placeholder="50" style="width:60px">
+      </div>
+      <div class="chips" data-grp="water" style="margin-top:5px">
+        <span class="chip" data-v="yes">취침 전 물 제공함</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Foley -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🚿</span> Foley / 소변</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="foley" data-single="1">
+      <span class="chip" data-v="yes">Foley cath 삽입 중</span>
+      <span class="chip" data-v="sv">Self void</span>
+    </div>
+    <div id="foley-sec" style="display:none;margin-top:8px">
+      <div class="sub">색깔</div>
+      <div class="chips" data-grp="urine-color" data-single="1">
+        <span class="chip" data-color="ok" data-v="clear">Clear</span>
+        <span class="chip" data-color="ok" data-v="pale yellow">Pale yellow</span>
+        <span class="chip" data-v="yellow">Yellow</span>
+        <span class="chip" data-color="warn" data-v="amber">Amber</span>
+        <span class="chip" data-color="dng" data-v="dark amber">Dark amber</span>
+        <span class="chip" data-color="dng" data-v="Hematuria">Hematuria</span>
+      </div>
+      <div class="sub">혼탁도</div>
+      <div class="chips" data-grp="urine-turb" data-single="1">
+        <span class="chip" data-color="ok" data-v="Clear">Clear</span>
+        <span class="chip" data-v="slightly turbid">Slightly turbid</span>
+        <span class="chip" data-color="warn" data-v="turbid">Turbid</span>
+      </div>
+      <div class="chips" data-grp="foley-stat" style="margin-top:5px">
+        <span class="chip" data-color="ok" data-v="patent+">Patent (+)</span>
+        <span class="chip" data-color="ok" data-v="leakage-">Leakage (-)</span>
+        <span class="chip" data-color="warn" data-v="leakage+">Leakage (+)</span>
+      </div>
+      <div class="sub">Bladder Irrigation</div>
+      <div class="chips" data-grp="bi" data-single="1">
+        <span class="chip" data-v="bi-no">미적용</span>
+        <span class="chip" data-v="bi-cont">Continuous irrigation 적용중</span>
+        <span class="chip" data-v="bi-inter">Intermittent irrigation 시행</span>
+      </div>
+      <div id="bi-sec" style="display:none;margin-top:6px">
+        <div class="sub">세척액</div>
+        <div class="chips" data-grp="bi-sol" data-single="1">
+          <span class="chip" data-v="N/S">N/S</span>
+          <span class="chip" data-v="N/S 3000ml">N/S 3000ml</span>
+          <span class="chip" data-v="Taurolidine">Taurolidine</span>
+        </div>
+        <div class="sub">유출액 양상</div>
+        <div class="chips" data-grp="bi-color" data-single="1">
+          <span class="chip" data-color="ok" data-v="clear">Clear</span>
+          <span class="chip" data-color="ok" data-v="light pink">Light pink</span>
+          <span class="chip" data-color="warn" data-v="pink">Pink</span>
+          <span class="chip" data-color="warn" data-v="red-tinged">Red-tinged</span>
+          <span class="chip" data-color="dng" data-v="gross hematuria">Gross hematuria</span>
+        </div>
+        <div class="sub">Clot 유무</div>
+        <div class="chips" data-grp="bi-clot" data-single="1">
+          <span class="chip" data-color="ok" data-v="clot-">Clot (-)</span>
+          <span class="chip" data-color="warn" data-v="clot+small">Clot (+) 소량</span>
+          <span class="chip" data-color="dng" data-v="clot+large">Clot (+) 다량</span>
+        </div>
+        <div class="sub">Catheter 상태</div>
+        <div class="chips" data-grp="bi-cath">
+          <span class="chip" data-color="ok" data-v="flow-ok">Flow 원활</span>
+          <span class="chip" data-color="warn" data-v="flow-slow">Flow 저하</span>
+          <span class="chip" data-color="dng" data-v="obstruct">Obstruction 의심</span>
+          <span class="chip" data-color="ok" data-v="3way-ok">3-way cath 유지중</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 낙상 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">⚠️</span> 낙상 고위험군</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="fall">
+      <span class="chip on-warn" data-color="warn" data-v="rail">침상난간 및 바퀴 고정 확인함</span>
+      <span class="chip" data-v="edu">낙상 예방교육 시행함</span>
+      <span class="chip" data-v="both">고정 확인 + 예방교육</span>
+    </div>
+  </div>
+</div>
+
+<!-- 신체보호대 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🛡</span> 신체보호대</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="rest" data-single="1">
+      <span class="chip" data-v="yes">적용 중</span>
+      <span class="chip" data-v="no">적용 안함</span>
+    </div>
+    <div id="rest-sec" style="display:none;margin-top:8px">
+      <div class="sub">부위</div>
+      <div class="chips" data-grp="rest-site">
+        <span class="chip on" data-v="양 팔">양 팔</span>
+        <span class="chip" data-v="Rt 손목">Rt 손목</span>
+        <span class="chip" data-v="Lt 손목">Lt 손목</span>
+        <span class="chip" data-v="양 손목">양 손목</span>
+        <span class="chip" data-v="양 발목">양 발목</span>
+      </div>
+      <div class="sub">사유</div>
+      <div class="chips" data-grp="rest-reason" data-single="1">
+        <span class="chip" data-color="warn" data-v="agit">Agitation 있음</span>
+        <span class="chip" data-v="vol">수의적 움직임 있음</span>
+        <span class="chip" data-v="risk">탈관 위험</span>
+      </div>
+      <div class="sub">처방</div>
+      <div class="chips" data-grp="rest-order" data-single="1">
+        <span class="chip on" data-v="order">주치의 처방 하에</span>
+        <span class="chip" data-v="noorder">구두지시 하에</span>
+      </div>
+      <div class="sub">피부 / 순환 / 부종</div>
+      <div class="chips" data-grp="rest-skin">
+        <span class="chip" data-color="ok" data-v="skin-ok">피부 양호</span>
+        <span class="chip" data-v="skin-obs">피부상태 주의관찰</span>
+        <span class="chip" data-color="ok" data-v="circ-ok">순환 양호</span>
+        <span class="chip" data-color="ok" data-v="edema-n">부종 없음</span>
+        <span class="chip" data-color="warn" data-v="edema-y">부종 있음</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 추가사항 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">📝</span> 추가 / 특이사항</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <textarea id="extra" placeholder="추가로 기록할 내용..."></textarea>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="act blue" onclick="genFirst()">📋 챠팅 생성</button>
+  <button class="act" onclick="resetFirst()">초기화</button>
+</div>
+<div id="out1" style="display:none;margin-top:14px">
+  <div class="sec" style="border-color:var(--accent);">
+    <div class="sec-header" style="cursor:default;background:var(--accent-light);">
+      <div class="sec-h">생성된 챠팅</div>
+    </div>
+    <div class="sec-body">
+      <div class="out-box" id="out1-txt"></div>
+      <div class="btn-row">
+        <button class="act green" onclick="copyOut('out1-txt')">📋 클립보드 복사</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-first -->
+
+<!-- ===================== 입원 챠팅 ===================== -->
+<div id="tab-admit" style="display:none">
+
+<!-- ① 주호소 & 입원경위 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">📋</span> 주호소 & 입원경위</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">입원 사유 직접 입력</div>
+    <textarea id="adm-reason" placeholder="입원 사유를 직접 입력하세요..." style="min-height:44px;margin-bottom:8px"></textarea>
+    <div class="sub">주호소 (C.C) 선택</div>
+    <div class="chips" data-grp="cc">
+      <span class="chip" data-v="chest pain">Chest pain</span>
+      <span class="chip" data-v="dyspnea">Dyspnea</span>
+      <span class="chip" data-v="fever">Fever</span>
+      <span class="chip" data-v="altered mentality">Altered mentality</span>
+      <span class="chip" data-v="abdominal pain">Abdominal pain</span>
+      <span class="chip" data-v="nausea/vomiting">N/V</span>
+      <span class="chip" data-v="dizziness">Dizziness</span>
+      <span class="chip" data-v="weakness">Weakness</span>
+      <span class="chip" data-v="syncope">Syncope</span>
+      <span class="chip" data-v="headache">Headache</span>
+      <span class="chip" data-v="trauma">Trauma</span>
+      <span class="chip" data-v="back pain">Back pain</span>
+      <span class="chip" data-v="palpitation">Palpitation</span>
+      <span class="chip" data-v="hematuria">Hematuria</span>
+    </div>
+    <div class="row" style="margin-top:6px">
+      <label>기타 주호소</label>
+      <input type="text" id="cc-custom" placeholder="직접 입력..." style="width:220px">
+    </div>
+    <div class="sub">입원경위</div>
+    <div class="chips" data-grp="admit-route" data-single="1">
+      <span class="chip" data-v="ER">응급실 통해 입원</span>
+      <span class="chip" data-v="OPD">외래 통해 입원</span>
+      <span class="chip" data-v="transfer">타 병원 전원</span>
+      <span class="chip" data-v="ward-transfer">타 병동 이동</span>
+    </div>
+    <div class="row" style="margin-top:6px">
+      <label>진단명</label>
+      <input type="text" id="adm-dx" placeholder="주진단명" style="width:240px">
+    </div>
+  </div>
+</div>
+
+<!-- ② V/S & EKG & 호흡 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🫀</span> V/S & EKG & 호흡</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="row">
+      <label>BP (mmHg)</label>
+      <input type="number" id="a-sbp" placeholder="120" style="width:56px"> / <input type="number" id="a-dbp" placeholder="80" style="width:56px">
+      <label style="min-width:24px">HR</label><input type="number" id="a-hr" placeholder="72" style="width:56px">
+      <label style="min-width:20px">RR</label><input type="number" id="a-rr" placeholder="16" style="width:52px">
+      <label style="min-width:46px">BT (°C)</label><input type="number" id="a-bt" placeholder="36.5" step="0.1" style="width:58px">
+      <label style="min-width:52px">SpO2 (%)</label><input type="number" id="a-spo2" placeholder="100" style="width:56px">
+    </div>
+    <div class="sub">EKG</div>
+    <div class="chips" data-grp="a-ekg-base">
+      <span class="chip" data-v="Sinus rhythm">Sinus rhythm</span>
+      <span class="chip" data-v="Sinus tachycardia">Sinus tachy</span>
+      <span class="chip" data-v="Sinus bradycardia">Sinus brady</span>
+      <span class="chip" data-v="Atrial fibrillation">A-fib</span>
+      <span class="chip" data-v="Atrial flutter">A-flutter</span>
+      <span class="chip" data-color="warn" data-v="c intermittently PVC">PVC (간헐)</span>
+      <span class="chip" data-color="dng" data-v="c frequently PVC">PVC (빈발)</span>
+      <span class="chip" data-color="warn" data-v="c ST elevation">ST elevation</span>
+      <span class="chip" data-color="warn" data-v="c ST depression">ST depression</span>
+      <span class="chip" data-v="특이소견 없음">특이소견 없음</span>
+    </div>
+    <div class="sub">산소 투여</div>
+    <div class="chips" data-grp="a-o2" data-single="1">
+      <span class="chip" data-color="ok" data-v="room-air">Room air</span>
+      <span class="chip" data-v="o2-nasal">O2 nasal prong</span>
+      <span class="chip" data-v="o2-mask">O2 mask</span>
+      <span class="chip" data-v="o2-nrb">NRB mask</span>
+    </div>
+    <div id="a-o2-detail" style="display:none;margin-top:6px">
+      <div class="row">
+        <label>유량 (L/min)</label><input type="number" id="a-o2-rate" placeholder="2" style="width:56px">
+      </div>
+    </div>
+    <div class="sub">Dyspnea / Secretion</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="chips" data-grp="a-dyspnea" data-single="1">
+        <span class="chip" data-color="ok" data-v="dyspnea-">Dyspnea (-)</span>
+        <span class="chip" data-color="dng" data-v="dyspnea+">Dyspnea (+)</span>
+      </div>
+      <div class="chips" data-grp="a-secretion" data-single="1">
+        <span class="chip" data-color="ok" data-v="secretion-">Secretion (-)</span>
+        <span class="chip" data-v="secretion±">Secretion (±)</span>
+        <span class="chip" data-color="warn" data-v="secretion+">Secretion (+)</span>
+      </div>
+    </div>
+    <div class="sub">Suction</div>
+    <div class="chips" data-grp="a-suction-type" data-single="1">
+      <span class="chip" data-v="orotr">Orotracheal</span>
+      <span class="chip" data-v="nasotr">Nasotracheal</span>
+      <span class="chip" data-v="trach">Tracheostomy</span>
+      <span class="chip" data-v="etsuction">Endotracheal</span>
+    </div>
+    <div id="a-suction-detail" style="display:none;margin-top:6px;padding:8px 10px;background:var(--bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="margin-top:2px">Sputum color</div>
+      <div class="chips" data-grp="a-sp-color" data-single="1">
+        <span class="chip" data-v="clear">Clear</span>
+        <span class="chip" data-color="warn" data-v="white">White</span>
+        <span class="chip" data-color="warn" data-v="yellow">Yellow</span>
+        <span class="chip" data-color="warn" data-v="green">Green</span>
+        <span class="chip" data-color="dng" data-v="brown">Brown</span>
+        <span class="chip" data-color="dng" data-v="bloody">Bloody</span>
+        <span class="chip" data-color="dng" data-v="rust-colored">Rust-colored</span>
+      </div>
+      <div class="sub">Consistency</div>
+      <div class="chips" data-grp="a-sp-tex" data-single="1">
+        <span class="chip" data-v="thin/watery">Thin/Watery</span>
+        <span class="chip" data-v="thick">Thick</span>
+        <span class="chip" data-v="tenacious">Tenacious</span>
+        <span class="chip" data-v="frothy">Frothy</span>
+      </div>
+      <div class="sub">Amount</div>
+      <div class="chips" data-grp="a-sp-amt" data-single="1">
+        <span class="chip" data-v="scant">Scant</span>
+        <span class="chip" data-v="small">Small</span>
+        <span class="chip" data-v="moderate">Moderate</span>
+        <span class="chip" data-v="large">Large</span>
+        <span class="chip" data-v="copious">Copious</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ 의식수준 & GCS & 활동 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🧠</span> 의식수준 & GCS & 활동</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">의식수준</div>
+    <div class="chips" data-grp="a-ms" data-single="1">
+      <span class="chip" data-color="ok" data-v="Alert">Alert</span>
+      <span class="chip" data-v="Drowsy">Drowsy</span>
+      <span class="chip" data-color="warn" data-v="Confusion">Confusion</span>
+      <span class="chip" data-color="warn" data-v="Stupor">Stupor</span>
+      <span class="chip" data-color="dng" data-v="Semi-coma">Semi-coma</span>
+      <span class="chip" data-color="dng" data-v="Coma">Coma</span>
+    </div>
+    <div class="sub">GCS</div>
+    <div class="row">
+      <label>E</label>
+      <select id="a-gcs-e"><option>4</option><option>3</option><option>2</option><option>1</option></select>
+      <label style="min-width:18px">V</label>
+      <select id="a-gcs-v"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option><option>1T</option></select>
+      <label style="min-width:18px">M</label>
+      <select id="a-gcs-m"><option>6</option><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+    </div>
+    <div class="sub">지남력</div>
+    <div class="chips" data-grp="a-orient">
+      <span class="chip" data-color="ok" data-v="시간 지남력 양호">시간</span>
+      <span class="chip" data-color="ok" data-v="장소 지남력 양호">장소</span>
+      <span class="chip" data-color="ok" data-v="사람 지남력 양호">사람</span>
+      <span class="chip" data-color="warn" data-v="시간 지남력 저하">시간(저하)</span>
+      <span class="chip" data-color="warn" data-v="장소 지남력 저하">장소(저하)</span>
+      <span class="chip" data-color="warn" data-v="사람 지남력 저하">사람(저하)</span>
+    </div>
+    <div class="sub">활동 능력</div>
+    <div class="chips" data-grp="a-activity" data-single="1">
+      <span class="chip" data-color="ok" data-v="독립적 보행 가능">독립 보행</span>
+      <span class="chip" data-v="부축 보행 가능">부축 보행</span>
+      <span class="chip" data-v="휠체어 이동">휠체어</span>
+      <span class="chip" data-color="warn" data-v="침상 안정">침상 안정</span>
+      <span class="chip" data-color="dng" data-v="침상 완전 안정">완전 침상 안정</span>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 계통별 신체검진 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🩺</span> 계통별 신체검진</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">호흡기계</div>
+    <div class="chips" data-grp="a-resp">
+      <span class="chip" data-color="ok" data-v="호흡음 정상">호흡음 정상</span>
+      <span class="chip" data-color="warn" data-v="호흡음 감소">호흡음 감소</span>
+      <span class="chip" data-color="warn" data-v="천명음 있음">천명음</span>
+      <span class="chip" data-color="warn" data-v="수포음 있음">수포음</span>
+      <span class="chip" data-color="ok" data-v="기침 없음">기침 없음</span>
+      <span class="chip" data-color="warn" data-v="기침 있음">기침 있음</span>
+    </div>
+    <div class="sub">순환기계</div>
+    <div class="chips" data-grp="a-circ">
+      <span class="chip" data-color="ok" data-v="심음 정상">심음 정상</span>
+      <span class="chip" data-color="warn" data-v="부정맥 관찰됨">부정맥</span>
+      <span class="chip" data-color="ok" data-v="말초순환 양호">말초순환 양호</span>
+      <span class="chip" data-color="ok" data-v="CRT 2초 이내">CRT 정상</span>
+      <span class="chip" data-color="warn" data-v="CRT 2초 이상">CRT 지연</span>
+    </div>
+    <div class="sub">소화기계</div>
+    <div class="chips" data-grp="a-gi">
+      <span class="chip" data-color="ok" data-v="장음 정상">장음 정상</span>
+      <span class="chip" data-color="warn" data-v="장음 감소">장음 감소</span>
+      <span class="chip" data-color="warn" data-v="장음 항진">장음 항진</span>
+      <span class="chip" data-color="ok" data-v="복부 부드러움">복부 부드러움</span>
+      <span class="chip" data-color="warn" data-v="복부 팽만 있음">복부 팽만</span>
+      <span class="chip" data-color="warn" data-v="압통 있음">압통</span>
+      <span class="chip" data-color="ok" data-v="오심/구토 없음">오심/구토 없음</span>
+      <span class="chip" data-color="warn" data-v="오심/구토 있음">오심/구토 있음</span>
+    </div>
+
+    <!-- 피부 -->
+    <div class="sub">피부</div>
+    <div class="chips" data-grp="a-skin">
+      <span class="chip" data-color="ok"  data-v="skin-ok">피부 양호</span>
+      <span class="chip" data-color="warn" data-v="redness">발적</span>
+      <span class="chip" data-color="warn" data-v="edema">부종</span>
+      <span class="chip" data-color="warn" data-v="wound">상처</span>
+      <span class="chip" data-color="warn" data-v="pressure-injury">욕창</span>
+      <span class="chip" data-color="warn" data-v="jaundice">황달</span>
+      <span class="chip" data-color="warn" data-v="rash">발진</span>
+      <span class="chip" data-color="warn" data-v="pallor">창백</span>
+    </div>
+
+    <!-- 발적 -->
+    <div id="skin-redness-detail" style="display:none;margin-top:6px;padding:10px 12px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="color:var(--yellow)">발적 세부사항</div>
+      <div class="sub">위치</div>
+      <div class="chips" data-grp="a-redness-site">
+        <span class="chip" data-v="상지">상지</span>
+        <span class="chip" data-v="하지">하지</span>
+        <span class="chip" data-v="복부">복부</span>
+        <span class="chip" data-v="흉부">흉부</span>
+        <span class="chip" data-v="등">등</span>
+        <span class="chip" data-v="둔부">둔부</span>
+        <span class="chip" data-v="얼굴">얼굴</span>
+      </div>
+      <div class="row" style="margin-top:4px"><label>기타 위치</label><input type="text" id="redness-site-custom" placeholder="직접 입력..." style="width:160px"></div>
+      <div class="sub">통증 / Swelling / Warmth</div>
+      <div class="chips" data-grp="a-redness-pain" data-single="1">
+        <span class="chip" data-color="ok" data-v="압통 없음">압통 (-)</span>
+        <span class="chip" data-color="warn" data-v="압통 있음">압통 (+)</span>
+      </div>
+      <div class="chips" data-grp="a-redness-swelling" data-single="1" style="margin-top:5px">
+        <span class="chip" data-color="ok" data-v="Swelling (-)">Swelling (-)</span>
+        <span class="chip" data-color="warn" data-v="Swelling (+)">Swelling (+)</span>
+      </div>
+      <div class="chips" data-grp="a-redness-warmth" data-single="1" style="margin-top:5px">
+        <span class="chip" data-color="ok" data-v="Warmth (-)">Warmth (-)</span>
+        <span class="chip" data-color="warn" data-v="Warmth (+)">Warmth (+)</span>
+      </div>
+    </div>
+
+    <!-- 부종 -->
+    <div id="skin-edema-detail" style="display:none;margin-top:6px;padding:10px 12px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="color:var(--yellow)">부종 세부사항</div>
+      <div class="sub">부위</div>
+      <div class="chips" data-grp="a-edema-site">
+        <span class="chip" data-v="양측 상지 부종">양측 상지</span>
+        <span class="chip" data-v="양측 하지 부종">양측 하지</span>
+        <span class="chip" data-v="사지 부종">사지</span>
+        <span class="chip" data-v="안면 부종">안면</span>
+        <span class="chip" data-v="전신 부종">전신</span>
+        <span class="chip" data-v="복부 부종">복부</span>
+      </div>
+      <div class="row" style="margin-top:4px"><label>기타 부위</label><input type="text" id="edema-site-custom" placeholder="직접 입력..." style="width:160px"></div>
+      <div class="sub">종류</div>
+      <div class="chips" data-grp="a-edema-type" data-single="1">
+        <span class="chip" data-v="pitting edema">Pitting edema</span>
+        <span class="chip" data-v="non-pitting edema">Non-pitting edema</span>
+      </div>
+      <div class="sub">Pitting 정도</div>
+      <div class="chips" data-grp="a-edema-grade" data-single="1">
+        <span class="chip" data-v="1+ (2mm)">1+ (2mm)</span>
+        <span class="chip" data-v="2+ (4mm)">2+ (4mm)</span>
+        <span class="chip" data-color="warn" data-v="3+ (6mm)">3+ (6mm)</span>
+        <span class="chip" data-color="dng" data-v="4+ (8mm↑)">4+ (8mm↑)</span>
+      </div>
+    </div>
+
+    <!-- 황달 -->
+    <div id="skin-jaundice-detail" style="display:none;margin-top:6px;padding:10px 12px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="color:var(--yellow)">황달 세부사항</div>
+      <div class="chips" data-grp="a-jaundice-type">
+        <span class="chip" data-color="warn" data-v="공막 황달 있음">공막 황달 (+)</span>
+        <span class="chip" data-color="ok" data-v="공막 황달 없음">공막 황달 (-)</span>
+        <span class="chip" data-color="warn" data-v="피부 황달 있음">피부 황달 (+)</span>
+      </div>
+    </div>
+
+    <!-- 발진 -->
+    <div id="skin-rash-detail" style="display:none;margin-top:6px;padding:10px 12px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="color:var(--yellow)">발진 세부사항</div>
+      <div class="sub">발진 양상</div>
+      <div class="chips" data-grp="a-rash-type">
+        <span class="chip" data-v="macular rash">Macular (반점)</span>
+        <span class="chip" data-v="papular rash">Papular (구진)</span>
+        <span class="chip" data-v="maculopapular rash">Maculopapular</span>
+        <span class="chip" data-v="vesicular rash">Vesicular (수포)</span>
+        <span class="chip" data-v="urticarial rash">Urticarial (두드러기)</span>
+        <span class="chip" data-v="petechiae">Petechiae (점상출혈)</span>
+        <span class="chip" data-v="purpura">Purpura (자반)</span>
+      </div>
+      <div class="sub">발진 부위</div>
+      <div class="chips" data-grp="a-rash-site">
+        <span class="chip" data-v="전신">전신</span>
+        <span class="chip" data-v="몸통">몸통</span>
+        <span class="chip" data-v="상지">상지</span>
+        <span class="chip" data-v="하지">하지</span>
+        <span class="chip" data-v="얼굴">얼굴</span>
+      </div>
+      <div class="sub">소양감</div>
+      <div class="chips" data-grp="a-rash-itch" data-single="1">
+        <span class="chip" data-color="ok" data-v="소양감 없음">소양감 (-)</span>
+        <span class="chip" data-color="warn" data-v="소양감 있음">소양감 (+)</span>
+      </div>
+    </div>
+
+    <!-- 상처 -->
+    <div id="skin-wound-detail" style="display:none;margin-top:6px;padding:10px 12px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="color:var(--yellow)">상처 세부사항</div>
+      <div class="sub">상처 종류</div>
+      <div class="chips" data-grp="a-wound-type">
+        <span class="chip" data-v="surgical wound">수술 상처</span>
+        <span class="chip" data-v="laceration">열상 (Laceration)</span>
+        <span class="chip" data-v="abrasion">찰과상 (Abrasion)</span>
+        <span class="chip" data-v="contusion">타박상 (Contusion)</span>
+        <span class="chip" data-v="puncture wound">자상 (Puncture)</span>
+        <span class="chip" data-v="burn wound">화상 (Burn)</span>
+        <span class="chip" data-v="ulcer">궤양 (Ulcer)</span>
+      </div>
+      <div class="sub">상처 부위</div>
+      <div class="chips" data-grp="a-wound-loc">
+        <span class="chip" data-v="상지">상지</span>
+        <span class="chip" data-v="하지">하지</span>
+        <span class="chip" data-v="복부">복부</span>
+        <span class="chip" data-v="흉부">흉부</span>
+        <span class="chip" data-v="두부">두부</span>
+        <span class="chip" data-v="등">등</span>
+        <span class="chip" data-v="둔부">둔부</span>
+      </div>
+      <div class="row" style="margin-top:4px"><label>기타 부위</label><input type="text" id="wound-loc-custom" placeholder="직접 입력..." style="width:160px"></div>
+      <div class="sub">상처 상태</div>
+      <div class="chips" data-grp="a-wound-status">
+        <span class="chip" data-color="ok" data-v="clean wound">Clean</span>
+        <span class="chip" data-color="warn" data-v="wound with serous discharge">Serous d/c</span>
+        <span class="chip" data-color="warn" data-v="wound with sanguineous discharge">Sanguineous d/c</span>
+        <span class="chip" data-color="dng" data-v="wound with purulent discharge">Purulent d/c</span>
+        <span class="chip" data-color="dng" data-v="infected wound">감염 의심</span>
+        <span class="chip" data-color="ok" data-v="healing well">Healing well</span>
+      </div>
+    </div>
+
+    <!-- 욕창 -->
+    <div id="skin-pi-detail" style="display:none;margin-top:6px;padding:10px 12px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="color:var(--red)">욕창 세부사항 (Pressure Injury)</div>
+      <div class="sub">발생 부위</div>
+      <div class="chips" data-grp="a-pi-site">
+        <span class="chip" data-v="천골부위">천골부위</span>
+        <span class="chip" data-v="미골부위">미골부위</span>
+        <span class="chip" data-v="발뒤꿈치">발뒤꿈치</span>
+        <span class="chip" data-v="팔꿈치">팔꿈치</span>
+        <span class="chip" data-v="후두부">후두부</span>
+        <span class="chip" data-v="귀">귀</span>
+        <span class="chip" data-v="좌측 대전자부">좌 대전자부</span>
+        <span class="chip" data-v="우측 대전자부">우 대전자부</span>
+        <span class="chip" data-v="내측 복사뼈">내측 복사뼈</span>
+      </div>
+      <div class="row" style="margin-top:4px"><label>기타 부위</label><input type="text" id="pi-site-custom" placeholder="직접 입력..." style="width:160px"></div>
+      <div class="sub">욕창 단계 (NPIAP)</div>
+      <div class="chips" data-grp="a-pi-stage" data-single="1">
+        <span class="chip" data-color="warn" data-v="Stage 1 (non-blanchable erythema, skin intact)">Stage 1</span>
+        <span class="chip" data-color="warn" data-v="Stage 2 (partial thickness skin loss)">Stage 2</span>
+        <span class="chip" data-color="dng" data-v="Stage 3 (full thickness skin loss)">Stage 3</span>
+        <span class="chip" data-color="dng" data-v="Stage 4 (full thickness tissue loss)">Stage 4</span>
+        <span class="chip" data-color="dng" data-v="Unstageable">Unstageable</span>
+        <span class="chip" data-color="warn" data-v="DTI (Deep tissue pressure injury)">DTI</span>
+      </div>
+      <div class="sub">삼출물</div>
+      <div class="chips" data-grp="a-pi-exudate">
+        <span class="chip" data-color="ok" data-v="삼출물 없음">없음</span>
+        <span class="chip" data-v="serous exudate">Serous</span>
+        <span class="chip" data-color="warn" data-v="sanguineous exudate">Sanguineous</span>
+        <span class="chip" data-color="dng" data-v="purulent exudate">Purulent</span>
+      </div>
+      <div class="sub">드레싱</div>
+      <div class="chips" data-grp="a-pi-dressing" data-single="1">
+        <span class="chip" data-v="foam dressing 적용">Foam dressing</span>
+        <span class="chip" data-v="hydrocolloid dressing 적용">Hydrocolloid</span>
+        <span class="chip" data-v="hydrogel dressing 적용">Hydrogel</span>
+        <span class="chip" data-v="wet dressing 적용">Wet dressing</span>
+        <span class="chip" data-v="드레싱 교환 시행">드레싱 교환</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ 통증 사정 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">💢</span> 통증 사정</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">스케일</div>
+    <div class="chips" id="pain2-type" style="margin-bottom:8px">
+      <span class="chip on" data-pscale2="NRS">NRS</span>
+      <span class="chip" data-pscale2="FPRS">FPRS</span>
+      <span class="chip" data-pscale2="VAS">VAS</span>
+    </div>
+    <div class="sub">점수</div>
+    <div id="pain2-scores" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+    <div class="sub" style="margin-top:8px">통증 부위</div>
+    <div class="chips" data-grp="a-pain-site">
+      <span class="chip" data-v="없음">통증 없음</span>
+      <span class="chip" data-v="두통">두통</span>
+      <span class="chip" data-v="흉통">흉통</span>
+      <span class="chip" data-v="복통">복통</span>
+      <span class="chip" data-v="요통">요통</span>
+      <span class="chip" data-v="사지 통증">사지 통증</span>
+      <span class="chip" data-v="수술 부위 통증">수술 부위</span>
+    </div>
+    <div class="sub">중재</div>
+    <div class="chips" data-grp="a-pain-act">
+      <span class="chip" data-color="ok" data-v="none">통증 호소 없음</span>
+      <span class="chip" data-v="obs">주의관찰</span>
+      <span class="chip" data-color="warn" data-v="med">진통제 투여 후 경감</span>
+      <span class="chip" data-v="nmed">비약물적 중재 시행</span>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ 도관/Line & 수액 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">💉</span> 도관 / Line & 수액</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="a-line">
+      <span class="chip" data-v="IV">IV (말초정맥)</span>
+      <span class="chip" data-v="rt-picc">Rt PICC</span>
+      <span class="chip" data-v="lt-picc">Lt PICC</span>
+      <span class="chip" data-v="rt-subcath">Rt Sub-cath</span>
+      <span class="chip" data-v="lt-subcath">Lt Sub-cath</span>
+      <span class="chip" data-v="rt-ij">Rt IJ</span>
+      <span class="chip" data-v="lt-ij">Lt IJ</span>
+      <span class="chip" data-v="a-line">A-line</span>
+      <span class="chip" data-v="foley">Foley cath</span>
+      <span class="chip" data-v="l-tube">L-tube</span>
+      <span class="chip" data-v="jp-drain">JP Drain</span>
+      <span class="chip" data-v="hemovac">Hemovac</span>
+    </div>
+    <!-- IV 세부 -->
+    <div id="a-iv-detail" style="display:none;margin-top:6px;padding:8px 10px;background:var(--bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="margin-top:2px">IV 니들 게이지</div>
+      <div class="chips" data-grp="a-iv-gauge" data-single="1">
+        <span class="chip" data-v="18G">18G</span>
+        <span class="chip" data-v="20G">20G</span>
+        <span class="chip" data-v="22G">22G</span>
+        <span class="chip" data-v="24G">24G</span>
+      </div>
+    </div>
+    <!-- Foley 세부 -->
+    <div id="a-foley-detail" style="display:none;margin-top:6px;padding:8px 10px;background:var(--bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="margin-top:2px">Foley cath 굵기</div>
+      <div class="chips" data-grp="a-foley-fr" data-single="1">
+        <span class="chip" data-v="14Fr">14Fr</span>
+        <span class="chip" data-v="16Fr">16Fr</span>
+        <span class="chip" data-v="18Fr">18Fr</span>
+        <span class="chip" data-v="20Fr">20Fr</span>
+        <span class="chip" data-v="22Fr">22Fr</span>
+      </div>
+      <div class="sub">Lumen</div>
+      <div class="chips" data-grp="a-foley-lumen" data-single="1">
+        <span class="chip" data-v="2-lumen">2 lumen</span>
+        <span class="chip" data-v="3-lumen">3 lumen</span>
+      </div>
+    </div>
+    <!-- L-tube 세부 -->
+    <div id="a-ltube-detail" style="display:none;margin-top:6px;padding:8px 10px;background:var(--bg);border:1px solid var(--card-border);border-radius:var(--radius-sm)">
+      <div class="sub" style="margin-top:2px">L-tube 굵기</div>
+      <div class="chips" data-grp="a-ltube-fr" data-single="1">
+        <span class="chip" data-v="16Fr">16Fr</span>
+        <span class="chip" data-v="18Fr">18Fr</span>
+        <span class="chip" data-v="20Fr">20Fr</span>
+        <span class="chip" data-v="22Fr">22Fr</span>
+      </div>
+      <div class="sub">고정 위치</div>
+      <div class="row">
+        <label>고정 위치</label>
+        <input type="text" id="a-ltube-depth" placeholder="예: 코끝에서 55cm" style="width:200px">
+      </div>
+    </div>
+    <div id="a-line-dress-list" style="margin-top:6px"></div>
+    <div class="hr"></div>
+    <div class="sub">Running 수액</div>
+    <div id="a-run-list" style="margin-bottom:6px"></div>
+    <div class="chips" style="margin-bottom:6px">
+      <span class="chip" onclick="aAddRun('N/S 500ml')">N/S 500</span>
+      <span class="chip" onclick="aAddRun('H/S 500ml')">H/S 500</span>
+      <span class="chip" onclick="aAddRun('5% D/W 500ml')">5% D/W</span>
+      <span class="chip" onclick="aAddRun('D5 1/2NS 500ml')">D5 1/2NS</span>
+      <span class="chip" onclick="aAddRun('20% D/W 250ml')">20% D/W</span>
+      <span class="chip" onclick="aAddRun('TPN')">TPN</span>
+      <span class="chip" onclick="aAddRun('Hepatamin 250ml')">Hepatamin</span>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="a-run-inp" placeholder="직접 입력..." style="width:200px" onkeydown="if(event.key==='Enter')aAddRunCustom()">
+      <button class="act sm" onclick="aAddRunCustom()">+ 추가</button>
+    </div>
+    <div class="sub" style="margin-top:10px">Infusion (속도 포함)</div>
+    <div id="a-inf-list" style="margin-bottom:6px"></div>
+    <div class="inf-row">
+      <select id="a-inf-drug" style="width:185px">
+        <option value="">-- 약물 선택 --</option>
+        <option>Dopamine 800mg/500ml</option>
+        <option>N-Epinephrine 4mg/4ml</option>
+        <option>Perdipine 10mg</option>
+        <option>Midazolam 50mg</option>
+        <option>Fentanyl 500mcg</option>
+        <option>Heparin 25000U</option>
+        <option>Insulin RI 50U</option>
+        <option value="_custom">직접입력</option>
+      </select>
+      <div id="a-inf-custom-wrap" style="display:none">
+        <input type="text" id="a-inf-custom" placeholder="약물명" style="width:130px">
+      </div>
+      <span style="font-size:12px;color:var(--text-3)">+</span>
+      <select id="a-inf-sol" style="width:110px">
+        <option value="">용해제 없음</option>
+        <option>5% D/W 100ml</option><option>5% D/W 200ml</option>
+        <option>N/S 100ml</option><option>N/S 250ml</option>
+      </select>
+      <input type="number" id="a-inf-rate" placeholder="cc/hr" style="width:60px">
+      <span style="font-size:12px;color:var(--text-3)">cc/hr</span>
+      <button class="act sm" onclick="aAddInf()">+ 추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ 복용약물 & 알러지 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">💊</span> 복용약물 & 알러지</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">복용약물</div>
+    <div class="chips" data-grp="a-meds" data-single="1">
+      <span class="chip" data-color="ok" data-v="복용약 없음">없음</span>
+      <span class="chip" data-v="복용약 있음, 지참약 확인함">있음 (지참약 확인)</span>
+      <span class="chip" data-v="복용약 있음, 처방 연계함">있음 (처방 연계)</span>
+    </div>
+    <div class="row" style="margin-top:6px">
+      <label>약물 메모</label>
+      <input type="text" id="a-med-memo" placeholder="예: 고혈압약, 당뇨약..." style="width:260px">
+    </div>
+    <div class="sub">알러지</div>
+    <div class="chips" data-grp="a-allergy" data-single="1">
+      <span class="chip" data-color="ok" data-v="nka">없음 (NKA)</span>
+      <span class="chip" data-color="warn" data-v="allergy">있음</span>
+    </div>
+    <div id="a-allergy-detail" style="display:none;margin-top:6px">
+      <div class="row">
+        <label>알러지 내용</label>
+        <input type="text" id="a-allergy-content" placeholder="약물명 / 증상" style="width:220px">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑧ 낙상 위험도 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">⚠️</span> 낙상 위험도 사정</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="chips" data-grp="a-fall-risk" data-single="1">
+      <span class="chip" data-color="ok" data-v="low">저위험</span>
+      <span class="chip" data-color="warn" data-v="high">고위험</span>
+    </div>
+    <div id="a-fall-sec" style="display:none;margin-top:8px">
+      <div class="sub">위험 요인</div>
+      <div class="chips" data-grp="a-fall-factor">
+        <span class="chip" data-v="낙상력 있음">낙상력</span>
+        <span class="chip" data-v="보행장애">보행장애</span>
+        <span class="chip" data-v="인지장애">인지장애</span>
+        <span class="chip" data-v="수면제/진정제 복용">수면제/진정제</span>
+        <span class="chip" data-v="이뇨제 복용">이뇨제</span>
+        <span class="chip" data-v="시력장애">시력장애</span>
+        <span class="chip" data-v="65세 이상">65세 이상</span>
+      </div>
+      <div class="sub">예방 중재</div>
+      <div class="chips" data-grp="a-fall-action">
+        <span class="chip on-warn" data-color="warn" data-v="침상난간 고정 확인">침상난간 고정 확인</span>
+        <span class="chip" data-v="낙상 예방교육 시행">낙상 예방교육</span>
+        <span class="chip" data-v="환경 정리 시행">환경 정리</span>
+        <span class="chip" data-v="Call light 제공">Call light 제공</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑨ 욕창 위험도 사정 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">🛏</span> 욕창 위험도 사정 (Braden Scale)</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">Braden Score 입력 (12점 이하 = 고위험, 13점 이상 = 저위험)</div>
+    <div class="row" style="align-items:center;gap:10px">
+      <label>점수</label>
+      <input type="number" id="a-braden-score" placeholder="0~23" min="0" max="23" style="width:64px" oninput="evalBraden(this.value)">
+      <span id="a-braden-result" style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--card-border)">—</span>
+    </div>
+    <div id="a-braden-sec" style="display:none;margin-top:8px">
+      <div class="sub">예방 중재</div>
+      <div class="chips" data-grp="a-press-action">
+        <span class="chip" data-v="2시간마다 체위변경 시행">체위변경 2hr</span>
+        <span class="chip" data-v="욕창 예방 패드 적용">예방 패드 적용</span>
+        <span class="chip" data-v="피부 상태 주의관찰">피부 주의관찰</span>
+        <span class="chip" data-v="욕창 예방교육 시행">예방교육 시행</span>
+      </div>
+      <div class="sub">욕창/상처 부위 추가</div>
+      <div class="chips" style="margin-bottom:6px">
+        <span class="chip" onclick="addWoundSite('천골부위')">천골부위</span>
+        <span class="chip" onclick="addWoundSite('발뒤꿈치')">발뒤꿈치</span>
+        <span class="chip" onclick="addWoundSite('팔꿈치')">팔꿈치</span>
+        <span class="chip" onclick="addWoundSite('후두부')">후두부</span>
+        <span class="chip" onclick="addWoundSite('귀')">귀</span>
+        <span class="chip" onclick="addWoundSite('좌측 대전자부')">좌 대전자부</span>
+        <span class="chip" onclick="addWoundSite('우측 대전자부')">우 대전자부</span>
+        <span class="chip" onclick="addWoundSite('미골부위')">미골부위</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <input type="text" id="wound-site-inp" placeholder="기타 부위 직접 입력..." style="width:200px" onkeydown="if(event.key==='Enter')addWoundSiteCustom()">
+        <button class="act sm" onclick="addWoundSiteCustom()">+ 추가</button>
+      </div>
+      <div id="wound-site-list" style="margin-bottom:8px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑩ 입원 오리엔테이션 & 교육 & 동의서 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">📚</span> 오리엔테이션 & 교육 & 동의서</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <div class="sub">교육 대상</div>
+    <div class="chips" data-grp="a-edu-target" data-single="1">
+      <span class="chip" data-v="환자 본인">환자 본인</span>
+      <span class="chip" data-v="보호자">보호자</span>
+      <span class="chip" data-v="환자 및 보호자">환자 및 보호자</span>
+    </div>
+    <div class="sub">보호자 동행</div>
+    <div class="chips" data-grp="a-guardian" data-single="1">
+      <span class="chip" data-color="ok" data-v="accompany">동행</span>
+      <span class="chip" data-v="absent">부재</span>
+    </div>
+    <div id="a-guardian-detail" style="display:none;margin-top:6px">
+      <div class="row">
+        <label>보호자 관계</label>
+        <input type="text" id="a-guardian-rel" placeholder="예: 배우자, 자녀, 형제..." style="width:180px">
+      </div>
+    </div>
+    <div class="sub">오리엔테이션 항목</div>
+    <div class="chips" data-grp="a-orient-items">
+      <span class="chip on" data-v="병실 구조 안내">병실 구조</span>
+      <span class="chip on" data-v="Call light 사용법 안내">Call light</span>
+      <span class="chip on" data-v="낙상 예방 안내">낙상 예방</span>
+      <span class="chip" data-v="금식 안내">금식 안내</span>
+      <span class="chip" data-v="면회 규정 안내">면회 규정</span>
+      <span class="chip" data-v="물품 관리 안내">물품 관리</span>
+      <span class="chip" data-v="소방 대피 안내">소방 대피</span>
+      <span class="chip" data-v="투약 설명 시행">투약 설명</span>
+      <span class="chip" data-v="검사 전 주의사항 안내">검사 전 주의사항</span>
+    </div>
+    <div class="sub">이해도</div>
+    <div class="chips" data-grp="a-edu-understand" data-single="1">
+      <span class="chip" data-color="ok" data-v="이해도 양호">이해도 양호</span>
+      <span class="chip" data-color="warn" data-v="이해도 불량 (재교육 필요)">이해도 불량</span>
+    </div>
+    <div class="hr"></div>
+    <div class="sub">동의서 서명</div>
+    <div class="chips" data-grp="a-consent">
+      <span class="chip" data-v="낙상 예방 안내문">낙상 예방 안내문</span>
+      <span class="chip" data-v="수혈 동의서">수혈 동의서</span>
+      <span class="chip" data-v="중심정맥관 삽입 동의서">중심정맥관 동의서</span>
+      <span class="chip" data-v="흉관 삽입 동의서">흉관 삽입 동의서</span>
+      <span class="chip" data-v="신체보호대 동의서">신체보호대 동의서</span>
+      <span class="chip" data-v="중환자실 입실 동의서">중환자실 입실 동의서</span>
+      <span class="chip" data-v="심폐소생술 금지 동의서">DNR 동의서</span>
+    </div>
+    <div class="sub">서명 대상</div>
+    <div class="chips" data-grp="a-consent-signer" data-single="1">
+      <span class="chip" data-v="환자 본인">환자 본인</span>
+      <span class="chip" data-v="보호자">보호자</span>
+    </div>
+  </div>
+</div>
+
+<!-- 추가사항 -->
+<div class="sec">
+  <div class="sec-header" onclick="toggleSec(this)">
+    <div class="sec-h"><span class="icon">📝</span> 추가 / 특이사항</div>
+    <span class="sec-arrow">▼</span>
+  </div>
+  <div class="sec-body">
+    <textarea id="a-extra" placeholder="추가로 기록할 내용..."></textarea>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="act blue" onclick="genAdmit()">📋 챠팅 생성</button>
+  <button class="act" onclick="resetAdmit()">초기화</button>
+</div>
+<div id="out-admit" style="display:none;margin-top:14px">
+  <div class="sec" style="border-color:var(--accent);">
+    <div class="sec-header" style="cursor:default;background:var(--accent-light);">
+      <div class="sec-h">생성된 입원 챠팅</div>
+    </div>
+    <div class="sec-body">
+      <div class="out-box" id="out-admit-txt"></div>
+      <div class="btn-row">
+        <button class="act green" onclick="copyOut('out-admit-txt')">📋 클립보드 복사</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-admit -->
+
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+/* ===== State ===== */
+let curMode = 'ACMV_VC', p1Scale = 'NRS';
+const runDrugs = [], infDrugs = [];
+
+/* ===== Section Toggle ===== */
+function toggleSec(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.sec-arrow');
+  if (!body || !arrow) return;
+  body.classList.toggle('collapsed');
+  arrow.classList.toggle('closed');
+}
+
+/* ===== Toast ===== */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ===== Score builder ===== */
+function buildScore(cid, max) {
+  const el = document.getElementById(cid);
+  el.innerHTML = '';
+  for (let i = 0; i <= max; i++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sbtn';
+    b.textContent = i;
+    b.addEventListener('click', () => {
+      el.querySelectorAll('.sbtn').forEach(x => x.classList.remove('s0', 's1', 's2'));
+      b.classList.add(i <= 2 ? 's0' : i <= 5 ? 's1' : 's2');
+    });
+    el.appendChild(b);
+  }
+}
+buildScore('pain1-scores', 10);
+
+/* ===== Pain scale switcher ===== */
+['pain1-type'].forEach(cid => {
+  document.getElementById(cid).addEventListener('click', e => {
+    const chip = e.target.closest('[data-pscale]');
+    if (!chip) return;
+    document.querySelectorAll('#' + cid + ' .chip').forEach(c => c.classList.remove('on', 'on-ok', 'on-warn', 'on-dng'));
+    chip.classList.add('on');
+    const sc = chip.dataset.pscale, isCpot = sc === 'CPOT';
+    p1Scale = sc; buildScore('pain1-scores', isCpot ? 8 : 10);
+  });
+});
+
+/* ===== Chip click handler ===== */
+const ON_CLASSES = ['on', 'on-ok', 'on-warn', 'on-dng'];
+function isOn(el) { return ON_CLASSES.some(c => el.classList.contains(c)); }
+function clearOn(el) { ON_CLASSES.forEach(c => el.classList.remove(c)); }
+
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.chip[data-v]');
+  if (!chip) return;
+  const grpEl = chip.closest('[data-grp]');
+  if (!grpEl) return;
+  const single = grpEl.dataset.single === '1';
+  const col = chip.dataset.color || '';
+  const cls = col ? 'on-' + col : 'on';
+  const wasOn = isOn(chip);
+
+  if (single) {
+    grpEl.querySelectorAll('.chip').forEach(c => clearOn(c));
+    if (!wasOn) chip.classList.add(cls);
+  } else {
+    clearOn(chip);
+    if (!wasOn) chip.classList.add(cls);
+  }
+  handleOn(grpEl.dataset.grp, chip.dataset.v, !wasOn);
+});
+
+/* ===== Conditional show/hide ===== */
+function show(id, on) { const el = document.getElementById(id); if (el) el.style.display = on ? 'block' : 'none'; }
+
+function handleOn(grp, v, on) {
+  if (grp === 'resp') { show('vent-sec', v === 'vent'); show('o2-sec', v === 'o2'); }
+  if (grp === 'sp-need') show('suction-sec', on && v === 'suction_done');
+  if (grp === 'foley') show('foley-sec', on && v === 'yes');
+  if (grp === 'bi') show('bi-sec', on && (v === 'bi-cont' || v === 'bi-inter'));
+  if (grp === 'ltube') show('ltube-sec', on && v === 'yes');
+  if (grp === 'resid') show('resid-amt-row', on && v === 'some');
+  if (grp === 'rest') show('rest-sec', on && v === 'yes');
+  // Drain types
+  const drainTypes = ['nat-drain', 'gomco', 'jp-drain', 'hemovac', 'ctd', 'thoracath'];
+  if (grp === 'line' && drainTypes.includes(v)) {
+    const anyDrain = drainTypes.some(dt =>
+      document.querySelector(`[data-grp="line"] .chip[data-v="${dt}"].on, [data-grp="line"] .chip[data-v="${dt}"].on-ok, [data-grp="line"] .chip[data-v="${dt}"].on-warn, [data-grp="line"] .chip[data-v="${dt}"].on-dng`)
+    );
+    show('drain-sec', anyDrain || on);
+  }
+  // Per-line dressing
+  if (grp === 'line') renderLineDress();
+}
+
+/* ===== Per-line dressing ===== */
+const LINE_LABELS = {
+  'rt-picc': 'Rt PICC', 'lt-picc': 'Lt PICC',
+  'rt-subcath': 'Rt Sub-cath', 'lt-subcath': 'Lt Sub-cath',
+  'rt-permcath': 'Rt Perm-cath', 'lt-permcath': 'Lt Perm-cath',
+  'rt-ij': 'Rt IJ', 'lt-ij': 'Lt IJ', 'a-line': 'A-line',
+  'thoracath': 'Thora-cath', 'ctd': 'CTD Drain',
+  'nat-drain': 'Natural drainage', 'gomco': 'Gomco drainage',
+  'jp-drain': 'JP Drain', 'hemovac': 'Hemovac'
+};
+// Lines that need dressing (catheters/drains with insertion sites)
+const DRESS_LINES = ['rt-picc','lt-picc','rt-subcath','lt-subcath','rt-permcath','lt-permcath','rt-ij','lt-ij','a-line','thoracath','ctd','jp-drain','hemovac'];
+
+function renderLineDress() {
+  const container = document.getElementById('line-dress-list');
+  const selected = ga('line').filter(l => DRESS_LINES.includes(l));
+  // Preserve existing selections
+  const prev = {};
+  container.querySelectorAll('.line-dress-item select').forEach(sel => {
+    prev[sel.dataset.line] = sel.value;
+  });
+  if (selected.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = '<div class="sub" style="margin-top:6px">도관별 드레싱</div>' +
+    selected.map(l => {
+      const prevVal = prev[l] || 'film';
+      return `<div class="line-dress-item">
+        <span class="ld-label">${LINE_LABELS[l]}</span>
+        <select data-line="${l}">
+          <option value="film" ${prevVal==='film'?'selected':''}>Film dressing, intact</option>
+          <option value="gauze" ${prevVal==='gauze'?'selected':''}>Gauze dressing, intact</option>
+          <option value="soiled" ${prevVal==='soiled'?'selected':''}>Soiled → 교환 시행</option>
+        </select>
+      </div>`;
+    }).join('');
+}
+
+/* ===== HFNC toggle ===== */
+document.getElementById('o2-route').addEventListener('change', function() {
+  show('hfnc-params', this.value === 'HFNC');
+});
+
+/* ===== Vent mode ===== */
+function setMode(m) {
+  curMode = m;
+  const modes = ['ACMV_VC', 'ACMV_PC', 'SIMV', 'CPAP', 'PSV'];
+  document.querySelectorAll('.mode-btn').forEach((b, i) => b.classList.toggle('on', modes[i] === m));
+  modes.forEach(x => show('p-' + x, x === m));
+  show('p-pressure', !['CPAP', 'PSV'].includes(m));
+}
+
+/* ===== Drug management ===== */
+function addRun(n) { if (!runDrugs.includes(n)) { runDrugs.push(n); renderRun(); } }
+function addRunCustom() {
+  const v = gv('run-inp');
+  if (v) { runDrugs.push(v); document.getElementById('run-inp').value = ''; renderRun(); }
+}
+function removeRun(i) { runDrugs.splice(i, 1); renderRun(); }
+function renderRun() {
+  document.getElementById('run-list').innerHTML = runDrugs.map((d, i) =>
+    `<span class="dtag dtag-run" onclick="removeRun(${i})">${d} ✕</span>`
+  ).join('');
+}
+
+document.getElementById('inf-drug').addEventListener('change', function() {
+  show('inf-custom-wrap', this.value === '_custom');
+});
+
+function addInf() {
+  const ds = gv('inf-drug'), dc = gv('inf-custom'), drug = ds === '_custom' ? dc : ds;
+  if (!drug) return;
+  const sol = gv('inf-sol'), rate = gv('inf-rate');
+  let lbl = drug;
+  if (sol) lbl += ` + ${sol}`;
+  if (rate) lbl += ` ${rate}cc/hr`;
+  infDrugs.push(lbl);
+  renderInf();
+  ['inf-drug', 'inf-custom', 'inf-sol', 'inf-rate'].forEach(id => document.getElementById(id).value = '');
+  show('inf-custom-wrap', false);
+}
+function removeInf(i) { infDrugs.splice(i, 1); renderInf(); }
+function renderInf() {
+  document.getElementById('inf-list').innerHTML = infDrugs.map((d, i) =>
+    `<span class="dtag dtag-inf" onclick="removeInf(${i})">${d} ✕</span>`
+  ).join('');
+}
+
+/* ===== Helpers ===== */
+function gv(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function ga(grp) {
+  return [...document.querySelectorAll(`[data-grp="${grp}"] .chip.on,[data-grp="${grp}"] .chip.on-ok,[data-grp="${grp}"] .chip.on-warn,[data-grp="${grp}"] .chip.on-dng`)]
+    .map(c => c.dataset.v).filter(Boolean);
+}
+function blk(lines, arr) { if (arr.length) { lines.push(...arr); lines.push(''); } }
+function trim(lines) { while (lines.length && !lines[lines.length - 1]) lines.pop(); }
+
+function painText(scoreId, scaleName, actGrp) {
+  const scoreEl = document.querySelector('#' + scoreId + ' .sbtn.s0,#' + scoreId + ' .sbtn.s1,#' + scoreId + ' .sbtn.s2');
+  const acts = ga(actGrp);
+  const out = [];
+  if (scoreEl) out.push(`통증 사정 : ${scaleName} ${scoreEl.textContent}점`);
+  acts.forEach(a => {
+    if (a === 'none') out.push('통증 호소 없음');
+    else if (a === 'obs') out.push('통증 주의관찰');
+    else if (a === 'med') out.push('진통제 투여 후 통증 경감됨');
+    else if (a === 'nmed') out.push('비약물적 중재 시행함');
+  });
+  return out;
+}
+
+function ventText() {
+  const tube = document.getElementById('tube-type').value;
+  const sz = gv('tube-size'), dep = gv('tube-depth');
+  const depStr = dep ? ` (${dep.replace(/[()]/g, '')})` : '';
+  const lines = [`${tube} ${sz}${depStr} insertion & Mechanical ventilator keep state`];
+
+  const modes = {
+    ACMV_VC: () => `Parameter : ACMV(VC) TV ${gv('vc-tv')}ml PEEP ${gv('vc-peep')}cmH2O RR ${gv('vc-rr')}회/min FiO2 ${gv('vc-fio2')}`,
+    ACMV_PC: () => `Parameter : ACMV(PC) PC above PEEP ${gv('pc-ps')}cmH2O PEEP ${gv('pc-peep')}cmH2O RR ${gv('pc-rr')}회/min FiO2 ${gv('pc-fio2')}`,
+    SIMV: () => {
+      const ps = gv('simv-ps');
+      return `Parameter : SIMV TV ${gv('simv-tv')}ml PS ${ps}cmH2O PEEP ${gv('simv-peep')}cmH2O RR ${gv('simv-rr')}회/min FiO2 ${gv('simv-fio2')}`;
+    },
+    CPAP: () => `Parameter : CPAP PEEP ${gv('cpap-peep')}cmH2O FiO2 ${gv('cpap-fio2')}`,
+    PSV: () => `Parameter : PSV PS above PEEP ${gv('psv-ps')}cmH2O PEEP ${gv('psv-peep')}cmH2O FiO2 ${gv('psv-fio2')}`
+  };
+  lines.push(modes[curMode]());
+
+  const pp = gv('ppeak'), ppl = gv('pplat'), dp = gv('dp');
+  if (!['CPAP', 'PSV'].includes(curMode) && (pp || ppl || dp))
+    lines.push(`Ppeak ${pp}cmH2O, Pplat ${ppl}cmH2O, Driving pressure ${dp}cmH2O`);
+
+  // Vent status
+  const vi = ga('vent-issue');
+  if (vi.includes('vent_ok')) lines.push('특이사항 없음');
+  if (vi.includes('vent_fight')) lines.push('Intermittently Vent fighting 있음');
+  if (vi.includes('alarm')) lines.push('Alarm 발생하여 확인함');
+
+  // Suction
+  if (ga('sp-need').includes('suction_done')) {
+    const sc = ga('sp-color'), st = ga('sp-tex'), sa = ga('sp-amt');
+    let suctionLine = 'Suction 시행함';
+    if (sc.length || st.length || sa.length)
+      suctionLine += ` : ${sc.join('')} ${st.join('')} 가래 ${sa.join('')} 흡인함`;
+    lines.push(suctionLine);
+    lines.push('Patency 양호함');
+  }
+
+  return lines;
+}
+
+/* ===== Line/Drain Maps ===== */
+const LINE_MAP = {
+  'rt-picc': 'Rt PICC insertion state',
+  'lt-picc': 'Lt PICC insertion state',
+  'rt-subcath': 'Rt sub-cath insertion state',
+  'lt-subcath': 'Lt sub-cath insertion state',
+  'rt-permcath': 'Rt Perm-cath insertion state',
+  'lt-permcath': 'Lt Perm-cath insertion state',
+  'rt-ij': 'Rt IJ catheter insertion state',
+  'lt-ij': 'Lt IJ catheter insertion state',
+  'a-line': 'A-line insertion state',
+  'thoracath': 'Thora-cath insertion state',
+  'ctd': 'CTD Drain insertion state',
+  'nat-drain': 'Natural drainage 유지중',
+  'gomco': 'Gomco drainage 유지중',
+  'jp-drain': 'JP Drain insertion state',
+  'hemovac': 'Hemovac insertion state'
+};
+const DRAIN_TYPES = ['nat-drain', 'gomco', 'jp-drain', 'hemovac', 'ctd', 'thoracath'];
+
+/* ===== Generate: First Charting ===== */
+function genFirst() {
+  const L = [];
+
+  // V/S
+  const sbp = gv('sbp');
+  if (sbp) blk(L, [`V/S ${sbp}/${gv('dbp')}-${gv('hr')}-${gv('rr')}-${gv('bt')}-${gv('spo2')}%`]);
+
+  // EKG
+  const eb = ga('ekg-base'), ea = ga('ekg-afib'), ee = ga('ekg-ectopy'), ead = ga('ekg-add');
+  if (eb.length || ea.length || ee.length || ead.length) {
+    let base = [...eb, ...ea].join(', ');
+    const ext = [...ee, ...ead.filter(v => v !== '특이소견 없어 주의관찰')];
+    if (ext.length) base += (base ? ' ' : '') + ext.join(' ');
+    const ekgB = ['EKG monitor keep state, ' + base];
+    if (ead.includes('특이소견 없어 주의관찰')) ekgB.push('특이소견 없어 주의관찰');
+    blk(L, ekgB);
+  }
+
+  // 호흡
+  const rv = ga('resp')[0];
+  if (rv === 'vent') blk(L, ventText());
+  else if (rv === 'o2') {
+    const route = document.getElementById('o2-route').value;
+    const respB = [];
+    if (route === 'HFNC') {
+      respB.push(`HFNC keep state, Flow ${gv('hfnc-flow')}L/min, FiO2 ${gv('hfnc-fio2')}`);
+    } else {
+      respB.push(`O2 inhalation ${gv('o2-rate')}L/min keep state via ${route}`);
+    }
+    const dy = ga('dyspnea'), dp2 = [];
+    if (dy.includes('dyspnea-')) dp2.push('Dyspnea (-)');
+    if (dy.includes('dyspnea+')) dp2.push('Dyspnea (+)');
+    if (dy.includes('sec-pm')) dp2.push('Secretion (±)');
+    if (dy.includes('sec-')) dp2.push('Secretion (-)');
+    if (dp2.length) respB.push(dp2.join(', '));
+    blk(L, respB);
+  } else if (rv === 'none') {
+    blk(L, ['자발호흡 유지 중, 특이사항 없음']);
+  }
+
+  // M/S & GCS
+  const ms = ga('ms');
+  if (ms.length) {
+    const msB = ['M/S ' + ms[0]];
+    msB.push(`GCS E${document.getElementById('gcs-e').value}/V${document.getElementById('gcs-v').value}/M${document.getElementById('gcs-m').value}`);
+    // 동공
+    const pLt = gv('pupil-lt'), pRt = gv('pupil-rt');
+    if (pLt || pRt) {
+      const ltR = document.getElementById('pupil-lt-r').value;
+      const rtR = document.getElementById('pupil-rt-r').value;
+      msB.push(`Pupil Lt ${pLt}mm/${ltR}, Rt ${pRt}mm/${rtR}`);
+    }
+    blk(L, msB);
+  }
+
+  // 통증
+  blk(L, painText('pain1-scores', p1Scale, 'pain1-act'));
+
+  // 도관/Line (개별 드레싱)
+  const la = ga('line'), lineB = [];
+  const DRESS_TEXT = { film: ', film dressing, intact', gauze: ', gauze dressing, intact', soiled: ', dressing soiled → 교환 시행함' };
+  la.forEach(l => {
+    if (DRAIN_TYPES.includes(l)) {
+      const dc = ga('drain-color'), damt = ga('drain-amt');
+      let s = LINE_MAP[l];
+      if (dc.length || damt.length) s += `, ${damt.join('')} ${dc.join('')} 배액 관찰됨`;
+      // 드레싱이 있는 drain (ctd, thoracath 등)
+      if (DRESS_LINES.includes(l)) {
+        const dSel = document.querySelector(`#line-dress-list select[data-line="${l}"]`);
+        if (dSel) s += (DRESS_TEXT[dSel.value] || ', intact');
+      }
+      lineB.push(s);
+    } else {
+      // Per-line dressing
+      const dSel = document.querySelector(`#line-dress-list select[data-line="${l}"]`);
+      const dressStr = dSel ? (DRESS_TEXT[dSel.value] || ', intact') : ', intact';
+      lineB.push(LINE_MAP[l] + dressStr);
+    }
+  });
+  blk(L, lineB);
+
+  // 약물
+  const drugB = [];
+  if (runDrugs.length) drugB.push(runDrugs.join(', ') + ' running state');
+  infDrugs.forEach(d => drugB.push(d + ' infusion state'));
+  blk(L, drugB);
+
+  // L-tube
+  if (ga('ltube')[0] === 'yes') {
+    const ltB = ['L-tube insertion state'];
+    const f = ga('feed')[0];
+    if (f === 'ok') ltB.push('경관식 유지중');
+    else if (f === 'npo') ltB.push('NPO');
+    else if (f === 'sow') ltB.push('NPO (SOW)');
+    const res = ga('resid')[0];
+    if (res === 'none') ltB.push('위잔류량 없음');
+    else if (res === 'some') {
+      const amt = gv('resid-amt');
+      ltB.push(`위잔류량 있음${amt ? ' (' + amt + 'ml)' : ''} → 확인 필요`);
+    }
+    if (ga('water').includes('yes')) ltB.push('취침 전 물 제공함');
+    blk(L, ltB);
+  }
+
+  // Foley
+  const fv = ga('foley')[0];
+  if (fv === 'yes') {
+    const uc = ga('urine-color')[0], ut = ga('urine-turb')[0];
+    let fs = 'Foley cath insertion state';
+    if (uc || ut) fs += `, urine ${uc || ''} & ${ut || ''}`;
+    const foleyB = [fs];
+    const fst = ga('foley-stat');
+    if (fst.length) foleyB.push(fst.map(v =>
+      v === 'patent+' ? 'Patent (+)' : v === 'leakage-' ? 'Leakage (-)' : 'Leakage (+)'
+    ).join(', '));
+    // Bladder Irrigation
+    const biType = ga('bi')[0];
+    if (biType === 'bi-cont' || biType === 'bi-inter') {
+      const biSol = ga('bi-sol')[0] || '';
+      const biColor = ga('bi-color')[0] || '';
+      const biClot = ga('bi-clot')[0] || '';
+      const biCath = ga('bi-cath');
+      if (biType === 'bi-cont') {
+        let biLine = 'Continuous bladder irrigation 적용중';
+        if (biSol) biLine += ` (${biSol})`;
+        foleyB.push(biLine);
+      } else {
+        let biLine = 'Intermittent bladder irrigation 시행함';
+        if (biSol) biLine += ` (${biSol})`;
+        foleyB.push(biLine);
+      }
+      // 유출액
+      const outParts = [];
+      if (biColor) outParts.push(`유출액 ${biColor}`);
+      if (biClot === 'clot-') outParts.push('clot (-)');
+      else if (biClot === 'clot+small') outParts.push('clot (+) 소량');
+      else if (biClot === 'clot+large') outParts.push('clot (+) 다량');
+      if (outParts.length) foleyB.push(outParts.join(', '));
+      // Catheter 상태
+      const cathParts = [];
+      if (biCath.includes('3way-ok')) cathParts.push('3-way catheter 유지중');
+      if (biCath.includes('flow-ok')) cathParts.push('flow 원활함');
+      else if (biCath.includes('flow-slow')) cathParts.push('flow 저하 관찰됨');
+      else if (biCath.includes('obstruct')) cathParts.push('obstruction 의심되어 확인 필요');
+      if (cathParts.length) foleyB.push(cathParts.join(', '));
+    }
+    blk(L, foleyB);
+  } else if (fv === 'sv') {
+    blk(L, ['Self void 가능한 상태']);
+  }
+
+  // 낙상
+  const fall = ga('fall');
+  if (fall.length) blk(L, ['낙상 고위험군 환자, ' + fall.map(v =>
+    v === 'rail' ? '침상 난간 및 바퀴 고정 확인함' :
+    v === 'edu' ? '낙상 예방교육 시행함' :
+    '낙상 예방교육 시행함, 침상 난간 및 침대바퀴 고정 확인함'
+  ).join(', ')]);
+
+  // 신체보호대
+  if (ga('rest')[0] === 'yes') {
+    const rs = ga('rest-site'), reason = ga('rest-reason')[0], order = ga('rest-order')[0], rsk = ga('rest-skin');
+    const site = rs.length ? rs.join(', ') : '양 팔';
+    const orderText = order === 'noorder' ? '구두지시 하에' : '주치의 처방 하에';
+    let line = '';
+    if (reason === 'agit') {
+      line = `Agitation 있고 탈관 위험 있어 ${orderText} ${site} 신체보호대 적용중`;
+    } else if (reason === 'vol') {
+      line = `수의적 움직임 있고 탈관 위험 있어 ${orderText} ${site} 신체보호대 적용중`;
+    } else {
+      line = `탈관 위험 있어 ${orderText} ${site} 신체보호대 적용중`;
+    }
+    const restB = [line];
+    const sp = [];
+    if (rsk.includes('skin-ok')) sp.push('피부상태 양호함');
+    else if (rsk.includes('skin-obs')) sp.push('적용부위 피부상태 주의관찰');
+    if (rsk.includes('circ-ok')) sp.push('순환 양호');
+    if (rsk.includes('edema-n')) sp.push('부종 없음');
+    else if (rsk.includes('edema-y')) sp.push('부종 있음');
+    if (sp.length) restB.push(sp.join(', '));
+    blk(L, restB);
+  }
+
+  // 추가
+  const ex = gv('extra');
+  if (ex) L.push(ex);
+
+  trim(L);
+  document.getElementById('out1-txt').textContent = L.join('\n');
+  show('out1', true);
+  document.getElementById('out1').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetFirst() {
+  resetChips('#tab-first');
+  document.querySelectorAll('#tab-first input, #tab-first textarea').forEach(el => el.value = '');
+  document.querySelectorAll('#tab-first select').forEach(el => el.selectedIndex = 0);
+  document.querySelectorAll('#pain1-scores .sbtn').forEach(b => b.classList.remove('s0', 's1', 's2'));
+  runDrugs.length = 0; infDrugs.length = 0;
+  renderRun(); renderInf();
+  setMode('ACMV_VC');
+  p1Scale = 'NRS'; buildScore('pain1-scores', 10);
+  document.querySelector('#pain1-type .chip').classList.add('on');
+  document.querySelector('[data-grp="resp"] .chip[data-v="vent"]').classList.add('on');
+  document.querySelector('[data-grp="fall"] .chip[data-v="rail"]').classList.add('on-warn');
+  const restSiteChip = document.querySelector('[data-grp="rest-site"] .chip[data-v="양 팔"]');
+  if (restSiteChip) restSiteChip.classList.add('on');
+  ['suction-sec', 'foley-sec', 'bi-sec', 'ltube-sec', 'rest-sec', 'drain-sec', 'inf-custom-wrap', 'hfnc-params', 'resid-amt-row'].forEach(id => show(id, false));
+  document.getElementById('line-dress-list').innerHTML = '';
+  const restOrderChip = document.querySelector('[data-grp="rest-order"] .chip[data-v="order"]');
+  if (restOrderChip) restOrderChip.classList.add('on');
+  show('vent-sec', true);
+  show('out1', false);
+  toast('초기화되었습니다');
+}
+
+/* ===== Shared helpers ===== */
+function resetChips(scope) {
+  document.querySelectorAll(scope + ' .chip').forEach(c => {
+    c.classList.remove('on', 'on-ok', 'on-warn', 'on-dng');
+  });
+}
+function copyOut(id) {
+  const txt = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(() => toast('클립보드에 복사되었습니다')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('클립보드에 복사되었습니다');
+  });
+}
+
+/* ===== Main tab switch ===== */
+function switchMainTab(tab) {
+  document.getElementById('tab-first').style.display = tab === 'icu' ? 'block' : 'none';
+  document.getElementById('tab-admit').style.display = tab === 'admit' ? 'block' : 'none';
+  document.getElementById('main-tab-icu').classList.toggle('on', tab === 'icu');
+  document.getElementById('main-tab-admit').classList.toggle('on', tab === 'admit');
+}
+
+/* ===== Admission tab: extra show/hide ===== */
+document.addEventListener('click', function admitChipHandler(e) {
+  const chip = e.target.closest('.chip[data-v]');
+  if (!chip) return;
+  const grpEl = chip.closest('[data-grp]');
+  if (!grpEl) return;
+  const grp = grpEl.dataset.grp;
+  const v = chip.dataset.v;
+  const on = chip.classList.contains('on') || chip.classList.contains('on-ok') ||
+              chip.classList.contains('on-warn') || chip.classList.contains('on-dng');
+  if (grp === 'a-o2') show('a-o2-detail', on && v !== 'room-air');
+  if (grp === 'a-allergy') show('a-allergy-detail', on && v === 'allergy');
+  if (grp === 'a-fall-risk') show('a-fall-sec', on && v === 'high');
+  if (grp === 'a-suction-type') show('a-suction-detail', on);
+  if (grp === 'a-guardian') show('a-guardian-detail', on && v === 'accompany');
+  if (grp === 'a-line') {
+    const anyIV = ga('a-line').includes('IV');
+    const anyFoley = ga('a-line').includes('foley');
+    const anyLtube = ga('a-line').includes('l-tube');
+    show('a-iv-detail', anyIV);
+    show('a-foley-detail', anyFoley);
+    show('a-ltube-detail', anyLtube);
+    renderALineDress();
+  }
+  // 피부 세부 패널
+  if (grp === 'a-skin') {
+    const skinMap = {
+      redness: 'skin-redness-detail',
+      edema: 'skin-edema-detail',
+      wound: 'skin-wound-detail',
+      'pressure-injury': 'skin-pi-detail',
+      jaundice: 'skin-jaundice-detail',
+      rash: 'skin-rash-detail'
+    };
+    if (v === 'skin-ok') {
+      Object.values(skinMap).forEach(id => show(id, false));
+    } else if (skinMap[v]) {
+      show(skinMap[v], on);
+    }
+  }
+});
+
+/* ===== Braden Score evaluator ===== */
+let bradenLevel = ''; // 'high' | 'low' | ''
+function evalBraden(val) {
+  const score = parseInt(val);
+  const resultEl = document.getElementById('a-braden-result');
+  if (isNaN(score) || val === '') {
+    bradenLevel = '';
+    resultEl.textContent = '—';
+    resultEl.style.background = 'var(--bg)';
+    resultEl.style.color = 'var(--text-3)';
+    resultEl.style.borderColor = 'var(--card-border)';
+    show('a-braden-sec', false);
+    return;
+  }
+  if (score <= 12) {
+    bradenLevel = 'high';
+    resultEl.textContent = `${score}점 — 고위험`;
+    resultEl.style.background = 'var(--red-bg)';
+    resultEl.style.color = 'var(--red)';
+    resultEl.style.borderColor = 'var(--red-border)';
+  } else {
+    bradenLevel = 'low';
+    resultEl.textContent = `${score}점 — 저위험`;
+    resultEl.style.background = 'var(--green-bg)';
+    resultEl.style.color = 'var(--green)';
+    resultEl.style.borderColor = 'var(--green-border)';
+  }
+  show('a-braden-sec', true);
+}
+
+/* ===== Admission Line Dressing ===== */
+const A_LINE_LABELS = {
+  'IV':'IV (말초정맥)', 'rt-picc':'Rt PICC', 'lt-picc':'Lt PICC',
+  'rt-subcath':'Rt Sub-cath', 'lt-subcath':'Lt Sub-cath',
+  'rt-ij':'Rt IJ', 'lt-ij':'Lt IJ', 'a-line':'A-line',
+  'foley':'Foley cath', 'l-tube':'L-tube',
+  'jp-drain':'JP Drain', 'hemovac':'Hemovac'
+};
+const A_DRESS_LINES = ['IV','rt-picc','lt-picc','rt-subcath','lt-subcath','rt-ij','lt-ij','a-line','jp-drain','hemovac'];
+
+function renderALineDress() {
+  const container = document.getElementById('a-line-dress-list');
+  const selected = ga('a-line').filter(l => A_DRESS_LINES.includes(l));
+  const prev = {};
+  container.querySelectorAll('.line-dress-item select').forEach(sel => { prev[sel.dataset.line] = sel.value; });
+  if (selected.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = '<div class="sub" style="margin-top:6px">도관별 드레싱 상태</div>' +
+    selected.map(l => {
+      const pv = prev[l] || 'film';
+      return `<div class="line-dress-item">
+        <span class="ld-label">${A_LINE_LABELS[l]}</span>
+        <select data-line="${l}">
+          <option value="film" ${pv==='film'?'selected':''}>Film dressing, intact</option>
+          <option value="gauze" ${pv==='gauze'?'selected':''}>Gauze dressing, intact</option>
+          <option value="soiled" ${pv==='soiled'?'selected':''}>Soiled → 교환 시행</option>
+          <option value="na" ${pv==='na'?'selected':''}>드레싱 없음</option>
+        </select>
+      </div>`;
+    }).join('');
+}
+
+/* ===== Admission Running / Infusion drugs ===== */
+const aRunDrugs = [], aInfDrugs = [];
+function aAddRun(n) { if (!aRunDrugs.includes(n)) { aRunDrugs.push(n); aRenderRun(); } }
+function aAddRunCustom() {
+  const v = gv('a-run-inp'); if (v) { aRunDrugs.push(v); document.getElementById('a-run-inp').value=''; aRenderRun(); }
+}
+function aRemoveRun(i) { aRunDrugs.splice(i,1); aRenderRun(); }
+function aRenderRun() {
+  document.getElementById('a-run-list').innerHTML = aRunDrugs.map((d,i) =>
+    `<span class="dtag dtag-run" onclick="aRemoveRun(${i})">${d} ✕</span>`).join('');
+}
+document.getElementById('a-inf-drug').addEventListener('change', function() {
+  show('a-inf-custom-wrap', this.value === '_custom');
+});
+function aAddInf() {
+  const ds=gv('a-inf-drug'), dc=gv('a-inf-custom'), drug=ds==='_custom'?dc:ds;
+  if (!drug) return;
+  const sol=gv('a-inf-sol'), rate=gv('a-inf-rate');
+  let lbl=drug;
+  if (sol) lbl+=` + ${sol}`;
+  if (rate) lbl+=` ${rate}cc/hr`;
+  aInfDrugs.push(lbl); aRenderInf();
+  ['a-inf-drug','a-inf-custom','a-inf-sol','a-inf-rate'].forEach(id => document.getElementById(id).value='');
+  show('a-inf-custom-wrap', false);
+}
+function aRemoveInf(i) { aInfDrugs.splice(i,1); aRenderInf(); }
+function aRenderInf() {
+  document.getElementById('a-inf-list').innerHTML = aInfDrugs.map((d,i) =>
+    `<span class="dtag dtag-inf" onclick="aRemoveInf(${i})">${d} ✕</span>`).join('');
+}
+
+/* ===== Wound site add system ===== */
+const woundSites = [];
+function addWoundSite(name) {
+  if (!woundSites.find(w => w.name===name)) { woundSites.push({name, type:'pi'}); renderWoundSiteList(); }
+}
+function addWoundSiteCustom() {
+  const v = gv('wound-site-inp');
+  if (v && !woundSites.find(w => w.name===v)) {
+    woundSites.push({name:v, type:'pi'});
+    document.getElementById('wound-site-inp').value='';
+    renderWoundSiteList();
+  }
+}
+function removeWoundSite(i) { woundSites.splice(i,1); renderWoundSiteList(); }
+function setWoundType(i, t) { woundSites[i].type=t; renderWoundSiteList(); }
+function renderWoundSiteList() {
+  const el = document.getElementById('wound-site-list');
+  if (woundSites.length===0) { el.innerHTML=''; return; }
+  el.innerHTML = woundSites.map((w,i) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:4px;background:var(--bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:600;color:var(--accent);min-width:80px">${w.name}</span>
+      <select onchange="setWoundType(${i},this.value)" style="font-size:12px;padding:4px 6px;border:1px solid var(--card-border);border-radius:var(--radius-sm);background:var(--card);color:var(--text);font-family:var(--font)">
+        <option value="pi" ${w.type==='pi'?'selected':''}>욕창 (Pressure Injury)</option>
+        <option value="wound" ${w.type==='wound'?'selected':''}>상처 (Wound)</option>
+      </select>
+      <button class="act sm" onclick="removeWoundSite(${i})" style="color:var(--red);border-color:var(--red)">✕ 삭제</button>
+    </div>
+  `).join('');
+}
+
+/* ===== Pain scale 2 ===== */
+buildScore('pain2-scores', 10);
+let p2Scale = 'NRS';
+document.getElementById('pain2-type').addEventListener('click', e => {
+  const chip = e.target.closest('[data-pscale2]');
+  if (!chip) return;
+  document.querySelectorAll('#pain2-type .chip').forEach(c => c.classList.remove('on','on-ok','on-warn','on-dng'));
+  chip.classList.add('on');
+  p2Scale = chip.dataset.pscale2;
+  buildScore('pain2-scores', 10);
+});
+
+/* ===== Generate: Admission Charting ===== */
+function genAdmit() {
+  const L = [];
+
+  // 주호소 & 입원경위
+  const admReason=gv('adm-reason');
+  const ccChips=ga('cc'), ccCustom=gv('cc-custom');
+  const ccAll=[...ccChips,...(ccCustom?[ccCustom]:[])];
+  const route=ga('admit-route')[0], dx=gv('adm-dx');
+  const routeMap={ER:'응급실 통해 입원',OPD:'외래 통해 입원',transfer:'타 병원에서 전원','ward-transfer':'타 병동에서 이동'};
+  const admitB=[];
+  if (admReason) admitB.push(admReason);
+  if (dx) admitB.push(`Dx: ${dx}`);
+  if (ccAll.length) admitB.push(`C.C: ${ccAll.join(', ')}`);
+  if (route) admitB.push(routeMap[route]||route);
+  blk(L, admitB);
+
+  // V/S & EKG & 호흡
+  const asbp=gv('a-sbp');
+  if (asbp) {
+    const vsB=[`V/S ${asbp}/${gv('a-dbp')}-${gv('a-hr')}-${gv('a-rr')}-${gv('a-bt')}-${gv('a-spo2')}%`];
+    const ekgBase=ga('a-ekg-base');
+    if (ekgBase.length) vsB.push('EKG monitor keep state, '+ekgBase.join(', '));
+    const ao2=ga('a-o2')[0];
+    if (ao2==='room-air') vsB.push('Room air state');
+    else if (ao2==='o2-nasal') vsB.push(`O2 ${gv('a-o2-rate')}L/min via nasal prong`);
+    else if (ao2==='o2-mask') vsB.push(`O2 ${gv('a-o2-rate')}L/min via simple mask`);
+    else if (ao2==='o2-nrb') vsB.push(`O2 ${gv('a-o2-rate')}L/min via NRB mask`);
+    const dysp=ga('a-dyspnea')[0], secr=ga('a-secretion')[0];
+    const respParts=[];
+    if (dysp==='dyspnea-') respParts.push('Dyspnea (-)');
+    else if (dysp==='dyspnea+') respParts.push('Dyspnea (+)');
+    if (secr==='secretion-') respParts.push('Secretion (-)');
+    else if (secr==='secretion±') respParts.push('Secretion (±)');
+    else if (secr==='secretion+') respParts.push('Secretion (+)');
+    if (respParts.length) vsB.push(respParts.join(', '));
+    const sType=ga('a-suction-type')[0];
+    if (sType) {
+      const sTypeMap={orotr:'Orotracheal suction',nasotr:'Nasotracheal suction',trach:'Tracheostomy tube suction',etsuction:'Endotracheal tube suction'};
+      const sc=ga('a-sp-color')[0], st=ga('a-sp-tex')[0], sa=ga('a-sp-amt')[0];
+      let sLine=`${sTypeMap[sType]} 시행함`;
+      const spParts=[];
+      if (sc) spParts.push(sc); if (st) spParts.push(st); if (sa) spParts.push(`${sa} amount`);
+      if (spParts.length) sLine+=` : ${spParts.join(', ')} sputum`;
+      vsB.push(sLine);
+    }
+    blk(L, vsB);
+  }
+
+  // 의식수준 & GCS & 활동
+  const ams=ga('a-ms')[0], aorient=ga('a-orient'), aact=ga('a-activity')[0];
+  const gcsE=document.getElementById('a-gcs-e').value, gcsV=document.getElementById('a-gcs-v').value, gcsM=document.getElementById('a-gcs-m').value;
+  if (ams||aorient.length||aact) {
+    const msB=[];
+    if (ams) msB.push(`M/S ${ams}`);
+    msB.push(`GCS E${gcsE}/V${gcsV}/M${gcsM}`);
+    if (aorient.length) {
+      const good=aorient.filter(v=>v.includes('양호')).map(v=>v.replace(' 지남력 양호',''));
+      const poor=aorient.filter(v=>v.includes('저하')).map(v=>v.replace(' 지남력 저하',''));
+      const parts=[];
+      if (good.length) parts.push(`지남력 양호 (${good.join('/')})`);
+      if (poor.length) parts.push(`지남력 저하 (${poor.join('/')})`);
+      if (parts.length) msB.push(parts.join(', '));
+    }
+    if (aact) msB.push(aact);
+    blk(L, msB);
+  }
+
+  // 신체검진
+  const aresp=ga('a-resp'), acirc=ga('a-circ'), agi=ga('a-gi'), askin=ga('a-skin');
+  const examB=[];
+  if (aresp.length) examB.push('호흡기 : '+aresp.join(', '));
+  if (acirc.length) examB.push('순환기 : '+acirc.join(', '));
+  if (agi.length) examB.push('소화기 : '+agi.join(', '));
+  if (askin.includes('skin-ok')) {
+    examB.push('피부 양호');
+  } else if (askin.length) {
+    const skinParts=[];
+    if (askin.includes('pallor')) skinParts.push('창백');
+    if (askin.includes('jaundice')) {
+      const jTypes=ga('a-jaundice-type');
+      let jStr='황달 있음';
+      if (jTypes.length) jStr+=` (${jTypes.join(', ')})`;
+      skinParts.push(jStr);
+    }
+    if (askin.includes('rash')) {
+      const rTypes=ga('a-rash-type'), rSites=ga('a-rash-site'), rItch=ga('a-rash-itch')[0];
+      let rStr='발진';
+      if (rTypes.length) rStr+=` : ${rTypes.join(', ')}`;
+      if (rSites.length) rStr+=` (${rSites.join(', ')})`;
+      if (rItch) rStr+=`, ${rItch}`;
+      skinParts.push(rStr);
+    }
+    if (askin.includes('redness')) {
+      const rSites=ga('a-redness-site'), rSiteCustom=gv('redness-site-custom');
+      const allRSites=[...rSites,...(rSiteCustom?[rSiteCustom]:[])];
+      const rPain=ga('a-redness-pain')[0], rSwelling=ga('a-redness-swelling')[0], rWarmth=ga('a-redness-warmth')[0];
+      let rStr='발적';
+      if (allRSites.length) rStr+=` (${allRSites.join(', ')})`;
+      const rDets=[];
+      if (rPain) rDets.push(rPain); if (rSwelling) rDets.push(rSwelling); if (rWarmth) rDets.push(rWarmth);
+      if (rDets.length) rStr+=', '+rDets.join(', ');
+      skinParts.push(rStr);
+    }
+    if (askin.includes('edema')) {
+      const eSites=ga('a-edema-site'), eSiteCustom=gv('edema-site-custom');
+      const allESites=[...eSites,...(eSiteCustom?[eSiteCustom]:[])];
+      const eType=ga('a-edema-type')[0], eGrade=ga('a-edema-grade')[0];
+      let eStr='';
+      if (allESites.length) eStr+=allESites.join(', ');
+      if (eType) eStr+=(eStr?' ':'')+eType;
+      if (eGrade) eStr+=(eStr?' ':'')+eGrade;
+      skinParts.push(eStr||'부종 있음');
+    }
+    if (askin.includes('wound')) {
+      const wTypes=ga('a-wound-type'), wLocs=ga('a-wound-loc'), wLocCustom=gv('wound-loc-custom'), wStatus=ga('a-wound-status');
+      const allWLocs=[...wLocs,...(wLocCustom?[wLocCustom]:[])];
+      let wStr='';
+      if (wTypes.length) wStr+=wTypes.join(', ');
+      if (allWLocs.length) wStr+=` (${allWLocs.join(', ')})`;
+      if (wStatus.length) wStr+=', '+wStatus.join(', ');
+      skinParts.push(wStr||'상처 있음');
+    }
+    if (askin.includes('pressure-injury')) {
+      const piSites=ga('a-pi-site'), piSiteCustom=gv('pi-site-custom');
+      const piStage=ga('a-pi-stage')[0], piExudate=ga('a-pi-exudate'), piDressing=ga('a-pi-dressing')[0];
+      const allPiSites=[...piSites,...(piSiteCustom?[piSiteCustom]:[])];
+      let piStr='Pressure injury';
+      if (allPiSites.length) piStr+=` (${allPiSites.join(', ')})`;
+      if (piStage) piStr+=`, ${piStage}`;
+      if (piExudate.length&&!piExudate.includes('삼출물 없음')) piStr+=`, ${piExudate.join(', ')}`;
+      if (piDressing) piStr+=`, ${piDressing}`;
+      skinParts.push(piStr);
+    }
+    if (skinParts.length) examB.push('피부 : '+skinParts.join(' / '));
+  }
+  blk(L, examB);
+
+  // 통증
+  const p2ScoreEl=document.querySelector('#pain2-scores .sbtn.s0,#pain2-scores .sbtn.s1,#pain2-scores .sbtn.s2');
+  const painSite=ga('a-pain-site'), painAct=ga('a-pain-act');
+  const painB=[];
+  if (p2ScoreEl) painB.push(`통증 사정 : ${p2Scale} ${p2ScoreEl.textContent}점`);
+  if (painSite.length&&!painSite.includes('없음')) painB.push('통증 부위 : '+painSite.join(', '));
+  painAct.forEach(a=>{
+    if (a==='none') painB.push('통증 호소 없음');
+    else if (a==='obs') painB.push('통증 주의관찰');
+    else if (a==='med') painB.push('진통제 투여 후 통증 경감됨');
+    else if (a==='nmed') painB.push('비약물적 중재 시행함');
+  });
+  blk(L, painB);
+
+  // 도관/Line
+  const alines=ga('a-line');
+  if (alines.length) {
+    const ADRESS_TEXT={film:', film dressing, intact',gauze:', gauze dressing, intact',soiled:', dressing soiled → 교환 시행함',na:''};
+    const lineB=alines.map(l=>{
+      const base=`${A_LINE_LABELS[l]||l} insertion state`;
+      let extra='';
+      if (l==='IV') {
+        const gauge=ga('a-iv-gauge')[0];
+        if (gauge) extra=` (${gauge})`;
+      } else if (l==='foley') {
+        const fr=ga('a-foley-fr')[0], lumen=ga('a-foley-lumen')[0];
+        const parts=[];
+        if (fr) parts.push(fr); if (lumen) parts.push(lumen);
+        if (parts.length) extra=` (${parts.join(', ')})`;
+      } else if (l==='l-tube') {
+        const fr=ga('a-ltube-fr')[0], depth=gv('a-ltube-depth');
+        const parts=[];
+        if (fr) parts.push(fr); if (depth) parts.push(`고정위치 ${depth}`);
+        if (parts.length) extra=` (${parts.join(', ')})`;
+      }
+      if (A_DRESS_LINES.includes(l)) {
+        const dSel=document.querySelector(`#a-line-dress-list select[data-line="${l}"]`);
+        return base+extra+(dSel?(ADRESS_TEXT[dSel.value]||', intact'):', intact');
+      }
+      return base+extra;
+    });
+    blk(L, lineB);
+  }
+
+  // 수액
+  const drugB=[];
+  if (aRunDrugs.length) drugB.push(aRunDrugs.join(', ')+' running state');
+  aInfDrugs.forEach(d=>drugB.push(d+' infusion state'));
+  blk(L, drugB);
+
+  // 복용약물 & 알러지
+  const amed=ga('a-meds')[0], amedMemo=gv('a-med-memo');
+  const aallergy=ga('a-allergy')[0], aallergyContent=gv('a-allergy-content');
+  const medB=[];
+  if (amed){let s=amed; if (amedMemo&&amed!=='복용약 없음') s+=` : ${amedMemo}`; medB.push(s);}
+  if (aallergy==='nka') medB.push('알러지 없음 (NKA)');
+  else if (aallergy==='allergy'){let s='알러지 있음'; if (aallergyContent) s+=` : ${aallergyContent}`; medB.push(s);}
+  blk(L, medB);
+
+  // 낙상 위험도
+  const afallRisk=ga('a-fall-risk')[0];
+  if (afallRisk){
+    const riskLabel=afallRisk==='high'?'낙상 고위험':'낙상 저위험';
+    const fallB=[`${riskLabel} 환자`];
+    if (afallRisk==='high'){
+      const factors=ga('a-fall-factor'), actions=ga('a-fall-action');
+      if (factors.length) fallB.push('위험요인 : '+factors.join(', '));
+      if (actions.length) fallB.push(actions.join(', '));
+    }
+    blk(L, fallB);
+  }
+
+  // 욕창 위험도
+  const bradenScore=gv('a-braden-score');
+  if (bradenScore && bradenLevel) {
+    const score=parseInt(bradenScore);
+    const riskLabel=bradenLevel==='high'?'욕창 고위험':'욕창 저위험';
+    const pressB=[`${riskLabel} 환자 (Braden ${score}점)`];
+    if (bradenLevel==='high'){
+      const actions=ga('a-press-action');
+      if (actions.length) pressB.push(actions.join(', '));
+    }
+    const piList=woundSites.filter(w=>w.type==='pi').map(w=>w.name);
+    const wndList=woundSites.filter(w=>w.type==='wound').map(w=>w.name);
+    if (piList.length) pressB.push(`Pressure injury : ${piList.join(', ')}`);
+    if (wndList.length) pressB.push(`상처 부위 : ${wndList.join(', ')}`);
+    blk(L, pressB);
+  }
+
+  // 오리엔테이션 & 교육
+  const aeduTarget=ga('a-edu-target')[0], aguardian=ga('a-guardian')[0], aguardianRel=gv('a-guardian-rel');
+  const aorientItems=ga('a-orient-items'), aeduUnderstand=ga('a-edu-understand')[0];
+  if (aeduTarget||aorientItems.length) {
+    const eduB=[];
+    let guardStr='';
+    if (aguardian==='accompany') guardStr=` (보호자${aguardianRel?' '+aguardianRel:''} 동행함)`;
+    else if (aguardian==='absent') guardStr=' (보호자 부재)';
+    if (aeduTarget) eduB.push(`입원 오리엔테이션 시행 : 교육 대상 ${aeduTarget}${guardStr}`);
+    if (aorientItems.length) eduB.push('교육 항목 : '+aorientItems.join(', '));
+    if (aeduUnderstand) eduB.push(aeduUnderstand);
+    blk(L, eduB);
+  }
+
+  // 동의서
+  const consents=ga('a-consent'), consentSigner=ga('a-consent-signer')[0];
+  if (consents.length) {
+    const signerStr=consentSigner?`보호자(${consentSigner})에게`:'보호자에게';
+    L.push(`${signerStr} 동의서 관련 설명 후 (${consents.join(', ')})에 서명받음`);
+    L.push('');
+  }
+
+  const aex=gv('a-extra');
+  if (aex) L.push(aex);
+
+  trim(L);
+  document.getElementById('out-admit-txt').textContent=L.join('\n');
+  show('out-admit', true);
+  document.getElementById('out-admit').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function resetAdmit() {
+  resetChips('#tab-admit');
+  document.querySelectorAll('#tab-admit input, #tab-admit textarea').forEach(el=>el.value='');
+  document.querySelectorAll('#pain2-scores .sbtn').forEach(b=>b.classList.remove('s0','s1','s2'));
+  p2Scale='NRS'; buildScore('pain2-scores', 10);
+  document.querySelector('#pain2-type .chip').classList.add('on');
+  aRunDrugs.length=0; aInfDrugs.length=0; woundSites.length=0;
+  aRenderRun(); aRenderInf(); renderWoundSiteList();
+  bradenLevel='';
+  const resultEl=document.getElementById('a-braden-result');
+  if (resultEl){resultEl.textContent='—';resultEl.style.background='var(--bg)';resultEl.style.color='var(--text-3)';resultEl.style.borderColor='var(--card-border)';}
+  const fallChip=document.querySelector('[data-grp="a-fall-action"] .chip[data-v="침상난간 고정 확인"]');
+  if (fallChip) fallChip.classList.add('on-warn');
+  ['병실 구조 안내','Call light 사용법 안내','낙상 예방 안내'].forEach(v=>{
+    const c=document.querySelector(`[data-grp="a-orient-items"] .chip[data-v="${v}"]`);
+    if (c) c.classList.add('on');
+  });
+  ['a-o2-detail','a-allergy-detail','a-fall-sec','a-braden-sec','a-suction-detail',
+   'skin-redness-detail','skin-edema-detail','skin-wound-detail','skin-pi-detail',
+   'skin-jaundice-detail','skin-rash-detail','a-inf-custom-wrap',
+   'a-iv-detail','a-foley-detail','a-ltube-detail','a-guardian-detail'].forEach(id=>show(id,false));
+  document.getElementById('a-line-dress-list').innerHTML='';
+  show('out-admit', false);
+  toast('초기화되었습니다');
+}
+
+</script>
+</body>
+</html>
