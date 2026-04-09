@@ -11,6 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <script>
+      if (location.protocol === 'http:' && location.hostname !== 'localhost') {
+        location.replace('https:' + location.href.slice(5));
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
