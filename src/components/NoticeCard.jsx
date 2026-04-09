@@ -21,13 +21,10 @@ export default function NoticeCard({ notice, keyword, onEdit, onDelete }) {
         <div className="notice-meta-top">
           {notice.important && <span className="badge-important">중요</span>}
           <span className="badge-category">{notice.category}</span>
-        </div>
-        <h3 className="notice-title">{highlight(notice.title, keyword)}</h3>
-        <div className="notice-meta-bottom">
-          <span>{notice.author}</span>
-          <span>{date}</span>
+          <span className="notice-date">{date}</span>
           <span className="expand-icon">{expanded ? '▲' : '▼'}</span>
         </div>
+        <p className="notice-preview">{highlight(notice.content.slice(0, 80), keyword)}{notice.content.length > 80 && !expanded ? '...' : ''}</p>
       </div>
       {expanded && (
         <div className="notice-content">
