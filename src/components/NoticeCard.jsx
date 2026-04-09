@@ -2,9 +2,10 @@ import { useState } from 'react';
 
 function highlight(text, keyword) {
   if (!keyword) return text;
-  const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.split(regex).map((part, i) =>
-    regex.test(part) ? <mark key={i}>{part}</mark> : part
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <mark key={i}>{part}</mark> : part
   );
 }
 
